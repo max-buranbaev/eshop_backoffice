@@ -1,8 +1,6 @@
 "use strict"
 
 var config = require('./config');
-var Good = require('./models/good').Good;
-
 
 exports = module.exports = function(app) {
 
@@ -10,15 +8,7 @@ exports = module.exports = function(app) {
     res.send(200, "Hello!");
   });
 
-  app.get('/createGood', (req, res) => {
-      var good = new Good({
-        name: "Подставка",
-        purchasePrice: 2000,
-        price: 2500
-      });
+  app.get('/createGood', require('./views/goods/index.js').add);
+  app.get('/createCategory', require('./views/categories/index.js').add);
 
-      good.save( (err, good) => {
-          res.status(200).send(good);
-      });
-  });
 }
