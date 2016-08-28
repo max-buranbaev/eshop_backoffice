@@ -1,11 +1,15 @@
 "use strict"
 
+var fs = require('fs');
 var config = require('./config');
 
 exports = module.exports = function(app) {
 
-  app.get('/dashboard', (req, res) => {
-    res.send(200, "Hello!");
+  app.get('/', function(req, res) {
+    fs.readFile('views/index.html', 'utf8', function(err, text) {
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.end(text);
+    });
   });
 
   app.get('/createGood', require('./views/goods/index.js').add);

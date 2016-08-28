@@ -2,6 +2,7 @@ var config = require('./config');
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var path = require('path');
 var app = express();
 
 // DB
@@ -17,6 +18,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // models
 require('./models')(app, mongoose);
+
+// static
+app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 require('./routes')(app);
