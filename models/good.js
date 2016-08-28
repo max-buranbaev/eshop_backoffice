@@ -1,6 +1,4 @@
-var mongoose = require('mongoose');
-var config = require('../config');
-mongoose.connect(config.db);
+var mongoose = require('../libs/mongoose');
 
 var schema = mongoose.Schema({
   name: {
@@ -14,6 +12,9 @@ var schema = mongoose.Schema({
   price: {
     type: Number,
     required: true
+  },
+  category: {
+    type: mongoose.Schema.Types.ObjectId
   }
 });
 
