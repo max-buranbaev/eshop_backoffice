@@ -1,13 +1,13 @@
-var Category = require('../../models/category').Category;
+'use strict'
 
 exports.add = function(req, res) {
+    var db = req.app.db;
+    var Category = db.model('Category');
 
-    var category = new Category({
-      name: "Категория",
-    });
+    var newCategory = new Category();
+    newCategory.name = "Категория 2";
 
-    category.save( (err, category) => {
+    newCategory.save( (err, category) => {
         res.send(200, category);
     });
-
 }
