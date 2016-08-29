@@ -21,6 +21,14 @@ exports = module.exports = function(app, mongoose) {
     }
   });
 
+  schema.statics.getAll = function(callback) {
+    var Good = this;
+    Good.find({}, 'name purchasePrice price', function(err, goods) {
+      if (err) return callback(err);
+      return callback(null, goods);
+    });
+  }
+
   schema.statics.getDataById = function(id, callback) {
     var Good = this;
     Good.findById(id).populate('category').exec( function(err, good) {
@@ -41,7 +49,7 @@ exports = module.exports = function(app, mongoose) {
 
         good.save(function(err) {
           if (err) return callback(err);
-          return callback(null, good); 
+          return callback(null, good);
         });
 
       });
