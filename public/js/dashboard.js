@@ -105,6 +105,7 @@ var render = function() {
 // For first rendering
 render();
 
+// TODO: WTF ? It's a wrong way, bro!
 $.get( "/goods", function( data ) {
   store.dispatch({type: "ADD_NEW_GOODS", newGoods: data});
 });
