@@ -22,6 +22,14 @@ exports.getDataById = function(req, res, next) {
   });
 }
 
+exports.getAll = function(req, res, next) {
+  var Good = req.app.db.models.Good;
+  Good.getAll(function(err, goods) {
+    if (err) return next(err);
+    res.status(200).send(goods);
+  });
+}
+
 exports.updateById = function(req, res, next) {
     var Good = req.app.db.models.Good;
     var newGoodData = {
