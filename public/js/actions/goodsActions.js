@@ -29,3 +29,39 @@ export function removeGood(_id) {
       });
   }
 }
+
+export function addGood(good) {
+  return function (dispatch) {
+    axios.post('/goods/add', { name: good.name, purchasePrice: good.purchasePrice, price: good.price })
+      .then(function (response) {
+        dispatch({
+          type: "ADD_GOOD",
+          newGood: response.data
+        })
+        dispatch({
+          type: "ADDING_GOOD_MODAL_CLOSE"
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+}
+
+export function changeGood(good) {
+  return function (dispatch) {
+    axios.post('/goods/change', { id: good.id, name: good.name, purchasePrice: good.purchasePrice, price: good.price })
+      .then(function (response) {
+        dispatch({
+          type: "CHANGE_GOOD",
+          newGood: response.data
+        })
+        dispatch({
+          type: "CHANGING_GOOD_MODAL_CLOSE"
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+}

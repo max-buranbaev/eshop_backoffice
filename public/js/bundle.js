@@ -21474,6 +21474,14 @@
 	
 	var _removeModal2 = _interopRequireDefault(_removeModal);
 	
+	var _addGoodModal = __webpack_require__(231);
+	
+	var _addGoodModal2 = _interopRequireDefault(_addGoodModal);
+	
+	var _changeGoodModal = __webpack_require__(232);
+	
+	var _changeGoodModal2 = _interopRequireDefault(_changeGoodModal);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21486,7 +21494,9 @@
 	  return {
 	    goods: store.goods,
 	    removingVisible: store.removingGood.show,
-	    removingID: store.removingGood.id
+	    removingID: store.removingGood.id,
+	    addingVisible: store.addingGood.show,
+	    changing: store.changingGood
 	  };
 	}), _dec(_class = function (_React$Component) {
 	  _inherits(Dashboard, _React$Component);
@@ -21501,6 +21511,11 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      _store2.default.dispatch((0, _goodsActions.fetchGoods)());
+	    }
+	  }, {
+	    key: 'showAddGoodModal',
+	    value: function showAddGoodModal() {
+	      _store2.default.dispatch({ type: "ADDING_GOOD_MODAL_SHOW" });
 	    }
 	  }, {
 	    key: 'render',
@@ -21570,7 +21585,7 @@
 	            ),
 	            _react2.default.createElement(
 	              'button',
-	              { type: 'button', className: 'btn btn-default btn-lg' },
+	              { type: 'button', className: 'btn btn-default btn-lg', onClick: this.showAddGoodModal },
 	              _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true' }),
 	              _react2.default.createElement(
 	                'span',
@@ -21619,7 +21634,9 @@
 	            )
 	          )
 	        ),
-	        _react2.default.createElement(_removeModal2.default, { visible: this.props.removingVisible, id: this.props.removingID })
+	        _react2.default.createElement(_removeModal2.default, { visible: this.props.removingVisible, id: this.props.removingID }),
+	        _react2.default.createElement(_addGoodModal2.default, { visible: this.props.addingVisible }),
+	        _react2.default.createElement(_changeGoodModal2.default, { visible: this.props.changing.show, id: this.props.changing.id, name: this.props.changing.name, purchasePrice: this.props.changing.purchasePrice, price: this.props.changing.price })
 	      );
 	    }
 	  }]);
@@ -21730,6 +21747,12 @@
 	      _store2.default.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props._id });
 	    }
 	  }, {
+	    key: 'handleClickEdit',
+	    value: function handleClickEdit() {
+	      console.log(this.state);
+	      _store2.default.dispatch({ type: "CHANGING_GOOD_MODAL_SHOW", id: this.props._id, name: this.props.name, purchasePrice: this.props.purchasePrice, price: this.props.price });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -21760,7 +21783,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'btn btn-xs' },
+	            { onClick: this.handleClickEdit.bind(this), className: 'btn btn-xs' },
 	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
 	          )
 	        ),
@@ -21795,6 +21818,8 @@
 	});
 	exports.fetchGoods = fetchGoods;
 	exports.removeGood = removeGood;
+	exports.addGood = addGood;
+	exports.changeGood = changeGood;
 	
 	var _axios = __webpack_require__(177);
 	
@@ -21822,6 +21847,38 @@
 	      });
 	      dispatch({
 	        type: "REMOVING_MODAL_CLOSE"
+	      });
+	    }).catch(function (error) {
+	      console.log(error);
+	    });
+	  };
+	}
+	
+	function addGood(good) {
+	  return function (dispatch) {
+	    _axios2.default.post('/goods/add', { name: good.name, purchasePrice: good.purchasePrice, price: good.price }).then(function (response) {
+	      dispatch({
+	        type: "ADD_GOOD",
+	        newGood: response.data
+	      });
+	      dispatch({
+	        type: "ADDING_GOOD_MODAL_CLOSE"
+	      });
+	    }).catch(function (error) {
+	      console.log(error);
+	    });
+	  };
+	}
+	
+	function changeGood(good) {
+	  return function (dispatch) {
+	    _axios2.default.post('/goods/change', { id: good.id, name: good.name, purchasePrice: good.purchasePrice, price: good.price }).then(function (response) {
+	      dispatch({
+	        type: "CHANGE_GOOD",
+	        newGood: response.data
+	      });
+	      dispatch({
+	        type: "CHANGING_GOOD_MODAL_CLOSE"
 	      });
 	    }).catch(function (error) {
 	      console.log(error);
@@ -24342,6 +24399,18 @@
 	  removingGood: {
 	    id: null,
 	    show: false
+	  },
+	  addingGood: {
+	    show: false
+	  },
+	  changingGood: {
+	    show: false,
+	    good: {
+	      id: null,
+	      name: null,
+	      purchasePrice: null,
+	      price: null
+	    }
 	  }
 	};
 	
@@ -24378,6 +24447,45 @@
 	          show: false
 	        }
 	      });
+	      break;
+	
+	    case "ADDING_GOOD_MODAL_SHOW":
+	      return Object.assign({}, state, {
+	        addingGood: {
+	          show: true
+	        }
+	      });
+	      break;
+	
+	    case "ADDING_GOOD_MODAL_CLOSE":
+	      return Object.assign({}, state, {
+	        addingGood: {
+	          show: false
+	        }
+	      });
+	      break;
+	
+	    case "ADD_GOOD":
+	      return Object.assign({}, state, {
+	        addingGood: {
+	          show: false
+	        },
+	        goods: state.goods.concat(action.newGood)
+	      });
+	      break;
+	
+	    case "CHANGING_GOOD_MODAL_SHOW":
+	      return Object.assign({}, state, {
+	        changingGood: {
+	          show: true,
+	          name: action.name,
+	          id: action.id,
+	          purchasePrice: action.purchasePrice,
+	          price: action.price
+	        }
+	      });
+	      break;
+	
 	    default:
 	      return state;
 	  }
@@ -42161,6 +42269,337 @@
 	}(_react2.default.Component);
 	
 	exports.default = RemoveModal;
+
+/***/ },
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _goodsActions = __webpack_require__(176);
+	
+	var _store = __webpack_require__(199);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var AddGoodModal = function (_React$Component) {
+	  _inherits(AddGoodModal, _React$Component);
+	
+	  function AddGoodModal() {
+	    _classCallCheck(this, AddGoodModal);
+	
+	    return _possibleConstructorReturn(this, (AddGoodModal.__proto__ || Object.getPrototypeOf(AddGoodModal)).apply(this, arguments));
+	  }
+	
+	  _createClass(AddGoodModal, [{
+	    key: 'setInitialState',
+	    value: function setInitialState() {
+	      return {
+	        name: null,
+	        purchasePrice: null,
+	        price: null
+	      };
+	    }
+	  }, {
+	    key: 'close',
+	    value: function close() {
+	      _store2.default.dispatch({ type: "ADDING_GOOD_MODAL_CLOSE" });
+	    }
+	  }, {
+	    key: 'handleChangeName',
+	    value: function handleChangeName(e) {
+	      this.setState({
+	        name: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleChangePurchasePrice',
+	    value: function handleChangePurchasePrice(e) {
+	      this.setState({
+	        purchasePrice: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleChangePrice',
+	    value: function handleChangePrice(e) {
+	      this.setState({
+	        price: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      e.target.reset();
+	      _store2.default.dispatch((0, _goodsActions.addGood)(this.state));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: this.props.visible ? "visible modal fade in" : "modal fade in", tabIndex: '-1', role: 'dialog' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal-dialog', role: 'document' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'close', onClick: this.close },
+	                _react2.default.createElement(
+	                  'span',
+	                  { 'aria-hidden': 'true' },
+	                  '×'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'h4',
+	                { className: 'modal-title' },
+	                'Добавить товар.'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              _react2.default.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit.bind(this) },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Название'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', onChange: this.handleChangeName.bind(this) })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Закупочная стоимость'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'purchasePrice', onChange: this.handleChangePurchasePrice.bind(this) })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Розничная цена'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'price', onChange: this.handleChangePrice.bind(this) })
+	                ),
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'submit', className: 'btn btn-default' },
+	                  'Добавить'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return AddGoodModal;
+	}(_react2.default.Component);
+	
+	exports.default = AddGoodModal;
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _goodsActions = __webpack_require__(176);
+	
+	var _store = __webpack_require__(199);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ChangeGoodModal = function (_React$Component) {
+	  _inherits(ChangeGoodModal, _React$Component);
+	
+	  function ChangeGoodModal() {
+	    _classCallCheck(this, ChangeGoodModal);
+	
+	    return _possibleConstructorReturn(this, (ChangeGoodModal.__proto__ || Object.getPrototypeOf(ChangeGoodModal)).apply(this, arguments));
+	  }
+	
+	  _createClass(ChangeGoodModal, [{
+	    key: 'setInitialState',
+	    value: function setInitialState() {
+	      return {
+	        id: this.props.id,
+	        name: this.props.name,
+	        purchasePrice: this.props.purchasePrice,
+	        price: this.props.price
+	      };
+	    }
+	  }, {
+	    key: 'close',
+	    value: function close() {
+	      _store2.default.dispatch({ type: "ADDING_GOOD_MODAL_CLOSE" });
+	    }
+	  }, {
+	    key: 'handleChangeName',
+	    value: function handleChangeName(e) {
+	      this.setState({
+	        name: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleChangePurchasePrice',
+	    value: function handleChangePurchasePrice(e) {
+	      this.setState({
+	        purchasePrice: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleChangePrice',
+	    value: function handleChangePrice(e) {
+	      this.setState({
+	        price: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      e.target.reset();
+	      _store2.default.dispatch((0, _goodsActions.changeGood)(this.state));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: this.props.visible ? "visible modal fade in" : "modal fade in", tabIndex: '-1', role: 'dialog' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal-dialog', role: 'document' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'close', onClick: this.close },
+	                _react2.default.createElement(
+	                  'span',
+	                  { 'aria-hidden': 'true' },
+	                  '×'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'h4',
+	                { className: 'modal-title' },
+	                'Изменить товар.'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              _react2.default.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit.bind(this) },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Название'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', onChange: this.handleChangeName.bind(this), placeholder: this.props.name })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Закупочная стоимость'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'purchasePrice', onChange: this.handleChangePurchasePrice.bind(this), placeholder: this.props.purchasePrice })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Розничная цена'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'price', onChange: this.handleChangePrice.bind(this), placeholder: this.props.price })
+	                ),
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'submit', className: 'btn btn-default' },
+	                  'Изменить'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return ChangeGoodModal;
+	}(_react2.default.Component);
+	
+	exports.default = ChangeGoodModal;
 
 /***/ }
 /******/ ]);

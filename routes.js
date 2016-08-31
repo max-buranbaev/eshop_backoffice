@@ -12,8 +12,8 @@ exports = module.exports = function(app) {
     });
   });
 
-  app.get('/createGood', require('./views/goods/index.js').add);
-  app.get('/updateGood/:id', require('./views/goods/index.js').updateById);
+  app.post('/goods/add', require('./views/goods/index.js').add);
+  app.post('/goods/change', require('./views/goods/index.js').updateById);
   app.get('/goods/', require('./views/goods/index.js').getAll);
   app.get('/good/:id', require('./views/goods/index.js').getDataById);
   app.post('/goods/remove', require('./views/goods/index.js').deleteById);

@@ -5,6 +5,18 @@ var initialState = {
     removingGood: {
       id: null,
       show: false
+    },
+    addingGood: {
+      show: false
+    },
+    changingGood: {
+      show: false,
+      good: {
+        id: null,
+        name: null,
+        purchasePrice: null,
+        price: null
+      }
     }
 }
 
@@ -36,6 +48,45 @@ var Reducer = function(state = initialState, action) {
               show: false
             }
           });
+      break;
+
+      case "ADDING_GOOD_MODAL_SHOW":
+        return Object.assign({}, state, {
+          addingGood: {
+            show: true
+          }
+        });
+      break;
+
+      case "ADDING_GOOD_MODAL_CLOSE":
+        return Object.assign({}, state, {
+          addingGood: {
+            show: false
+          }
+        });
+      break;
+
+      case "ADD_GOOD":
+        return Object.assign({}, state, {
+          addingGood: {
+            show: false
+          },
+          goods: state.goods.concat(action.newGood)
+        });
+      break;
+
+      case "CHANGING_GOOD_MODAL_SHOW":
+        return Object.assign({}, state, {
+          changingGood: {
+            show: true,
+            name: action.name,
+            id: action.id,
+            purchasePrice: action.purchasePrice,
+            price: action.price
+          }
+        });
+      break;
+
       default:
         return state;
     }

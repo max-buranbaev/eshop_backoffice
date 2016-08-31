@@ -5,12 +5,16 @@ import store from '../store.js'
 
 import Goods from './goods.jsx'
 import RemoveModal from './removeModal.jsx'
+import AddGoodModal from './addGoodModal.jsx'
+import ChangeGoodModal from './changeGoodModal.jsx'
 
 @connect( (store) => {
   return {
     goods: store.goods,
     removingVisible: store.removingGood.show,
-    removingID: store.removingGood.id
+    removingID: store.removingGood.id,
+    addingVisible: store.addingGood.show,
+    changing: store.changingGood
   }
 })
 
@@ -18,6 +22,10 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
     store.dispatch(fetchGoods());
+  }
+
+  showAddGoodModal() {
+      store.dispatch({type: "ADDING_GOOD_MODAL_SHOW"});
   }
 
   render() {
@@ -37,7 +45,7 @@ class Dashboard extends React.Component {
               <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
               <span>Добавить категорию</span>
             </button>
-            <button type="button" className="btn btn-default btn-lg">
+            <button type="button" className="btn btn-default btn-lg" onClick={this.showAddGoodModal}>
               <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
               <span>Добавить товар</span>
             </button>
@@ -59,6 +67,8 @@ class Dashboard extends React.Component {
           </div>
         </div>
         <RemoveModal visible={ this.props.removingVisible } id={ this.props.removingID } />
+        <AddGoodModal visible={ this.props.addingVisible } />
+        <ChangeGoodModal visible={ this.props.changing.show } id={ this.props.changing.id } name={ this.props.changing.name } purchasePrice={ this.props.changing.purchasePrice } price={ this.props.changing.price }/>
       </div>
     )
   }
