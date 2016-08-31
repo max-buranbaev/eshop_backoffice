@@ -1,44 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import Dashboard from './components/dashboard.jsx';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Dashboard from './components/dashboard.jsx'
+import { Provider } from 'react-redux'
+import store from './store.js'
+import axios from 'axios'
 
 
-var DashboardReducer = function(state, action) {
-    var newState = {};
-    switch (action.type) {
-      case "ADD_NEW_GOODS":
-        newState = Object.assign({}, { goods: action.newGoods});
-        return newState;
-        break;
-      default:
-        return state;
-    }
-}
-
-var store = createStore(DashboardReducer, { goods: [] });
 
 // Render
 var render = function() {
-  var ds = store.getState();
   ReactDOM.render(
-    <Dashboard goods={ ds.goods }/>,
+    <Provider store={store}>
+      <Dashboard />
+    </Provider>,
     document.getElementById("dashboard")
-  );
-};
-
-store.subscribe(render);
-
-// For first rendering
+  )
+}
 render();
 
-// TODO: WTF ? It's a wrong way, bro!
-
-
-$.get( "/goods", function( data ) {
-  store.dispatch({type: "ADD_NEW_GOODS", newGoods: data});
-});
-
-
-
-// Rerendering on changing store
+store.subscribe(render);
