@@ -1,5 +1,8 @@
-module.exports = React.createClass({
-  render: function() {
+import React from 'react';
+import Goods from './goods.jsx';
+
+class Dashboard extends React.Component {
+  render() {
     return (
       <div>
         <div className="col-md-2">
@@ -21,13 +24,27 @@ module.exports = React.createClass({
               <span>Добавить товар</span>
             </button>
           </div>
-          <div className="row" style={{paddingTop: "20px"}}>
+          <div className="row" style={{ paddingTop: "20px" }}>
             <table className="table table-hover">
-              <Goods goods={ this.props.goods }/>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Название</th>
+                  <th>Цена закупки</th>
+                  <th>Цена продажи</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <Goods goods={ this.props.goods }/>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
     )
   }
-});
+}
+
+export default Dashboard;

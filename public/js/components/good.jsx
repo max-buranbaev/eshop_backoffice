@@ -1,8 +1,12 @@
-module.exports = React.createClass({
-    handleClick: function() {
+import React from 'react';
+
+class Good extends React.Component {
+
+    handleClick() {
       store.dispatch({type: "ADD_NEW_GOODS", newGoods: []});
-    },
-    render: function() {
+    }
+
+    render() {
       return (
         <tr>
           <td>{this.props._id}</td>
@@ -14,4 +18,7 @@ module.exports = React.createClass({
         </tr>
       )
     }
-});
+
+};
+
+export default Good;
