@@ -49,11 +49,12 @@ exports.updateById = function(req, res, next) {
 
 exports.deleteById = function(req, res, next) {
   var Good = req.app.db.models.Good;
-  Good.findByIdAndRemove(req.params.id, function(err) {
+  console.log("Somebody removes good with id = " + req.body.id);
+  Good.findByIdAndRemove(req.body.id, function(err) {
     if(err) {
       res.status(404).end();
     } else {
-      res.status(200).send("ok").end();
+      res.status(200).send(req.body.id).end();
     }
   });
 }

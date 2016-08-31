@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from "react-redux"
+import store from '../store.js';
 
 class Good extends React.Component {
 
-    handleClick() {
-      store.dispatch({type: "ADD_NEW_GOODS", newGoods: []});
+    handleClickRemove() {
+      store.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props._id });
     }
 
     render() {
@@ -13,8 +15,8 @@ class Good extends React.Component {
           <td>{this.props.name}</td>
           <td>{this.props.purchasePrice}</td>
           <td>{this.props.price}</td>
-          <td><button onClick={ this.handleClick } className="btn btn-xs"><span className="glyphicon glyphicon-pencil"></span></button></td>
-          <td><button className="btn btn-xs"><span className="glyphicon glyphicon-remove"></span></button></td>
+          <td><button className="btn btn-xs"><span className="glyphicon glyphicon-pencil"></span></button></td>
+          <td><button onClick={ this.handleClickRemove.bind(this) } className="btn btn-xs"><span className="glyphicon glyphicon-remove"></span></button></td>
         </tr>
       )
     }

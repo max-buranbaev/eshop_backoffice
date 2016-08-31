@@ -1,7 +1,25 @@
-import React from 'react';
-import Goods from './goods.jsx';
+import React from 'react'
+import { connect } from "react-redux"
+import { fetchGoods } from '../actions/goodsActions'
+import store from '../store.js'
+
+import Goods from './goods.jsx'
+import RemoveModal from './removeModal.jsx'
+
+@connect( (store) => {
+  return {
+    goods: store.goods,
+    removingVisible: store.removingGood.show,
+    removingID: store.removingGood.id
+  }
+})
 
 class Dashboard extends React.Component {
+
+  componentWillMount() {
+    store.dispatch(fetchGoods());
+  }
+
   render() {
     return (
       <div>
@@ -36,12 +54,11 @@ class Dashboard extends React.Component {
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
-                <Goods goods={ this.props.goods }/>
-              </tbody>
+              <Goods goods={ this.props.goods} />
             </table>
           </div>
         </div>
+        <RemoveModal visible={ this.props.removingVisible } id={ this.props.removingID } />
       </div>
     )
   }
