@@ -1,9 +1,11 @@
 import _ from 'loDash'
 
 var initialState = {
+    categories: [],
     goods: [],
-    removingGood: {
+    removingModal: {
       id: null,
+      type: null,
       show: false
     },
     addingGood: {
@@ -12,6 +14,9 @@ var initialState = {
     changingGood: {
       show: false,
       good: {}
+    },
+    addingCategory: {
+      show: false
     }
 }
 
@@ -41,18 +46,20 @@ var Reducer = function(state = initialState, action) {
 
       case "REMOVING_MODAL_SHOW":
         return Object.assign({}, state, {
-          removingGood: {
+          removingModal: {
             id: action.id,
-            show: true
+            show: true,
+            type: action.removeType
           }
         });
         break;
 
       case "REMOVING_MODAL_CLOSE":
           return Object.assign({}, state, {
-            removingGood: {
+            removingModal: {
               id: null,
-              show: false
+              show: false,
+              type: null
             }
           });
       break;
@@ -112,7 +119,41 @@ var Reducer = function(state = initialState, action) {
         });
         break;
 
+        case "ADDING_CATEGORY_MODAL_SHOW":
+          return Object.assign({}, state, {
+            addingCategory: {
+              show: true
+            }
+          });
+        break;
 
+        case "ADDING_CATEGORY_MODAL_CLOSE":
+          return Object.assign({}, state, {
+            addingCategory: {
+              show: false
+            }
+          });
+        break;
+
+        case "FETCH_CATEGORIES":
+          return Object.assign({}, state, {
+            categories: action.payload
+          });
+          break;
+
+        case "ADD_CATEGORY":
+          return Object.assign({}, state, {
+            addingCategory: {
+              show: false
+            },
+            categories: state.categories.concat(action.newCategory)
+          });
+          break;
+
+        case "REMOVE_CATEGORY":
+          var newCategories = _.filter(state.categories, (cat) => cat._id != action.id);
+          return Object.assign({}, state, { categories: newCategories });
+          break;
       default:
         return state;
     }

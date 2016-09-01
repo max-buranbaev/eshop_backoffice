@@ -67,7 +67,7 @@
 	
 	var _reactRedux = __webpack_require__(174);
 	
-	var _store = __webpack_require__(220);
+	var _store = __webpack_require__(221);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -21462,25 +21462,35 @@
 	
 	var _goodsActions = __webpack_require__(197);
 	
-	var _store = __webpack_require__(220);
+	var _categoryActions = __webpack_require__(220);
+	
+	var _store = __webpack_require__(221);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _goods = __webpack_require__(228);
+	var _goods = __webpack_require__(229);
 	
 	var _goods2 = _interopRequireDefault(_goods);
 	
-	var _removeModal = __webpack_require__(230);
+	var _categories = __webpack_require__(231);
+	
+	var _categories2 = _interopRequireDefault(_categories);
+	
+	var _removeModal = __webpack_require__(232);
 	
 	var _removeModal2 = _interopRequireDefault(_removeModal);
 	
-	var _addGoodModal = __webpack_require__(231);
+	var _addGoodModal = __webpack_require__(233);
 	
 	var _addGoodModal2 = _interopRequireDefault(_addGoodModal);
 	
-	var _changeGoodModal = __webpack_require__(232);
+	var _changeGoodModal = __webpack_require__(234);
 	
 	var _changeGoodModal2 = _interopRequireDefault(_changeGoodModal);
+	
+	var _addCategoryModal = __webpack_require__(235);
+	
+	var _addCategoryModal2 = _interopRequireDefault(_addCategoryModal);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21493,10 +21503,11 @@
 	var Dashboard = (_dec = (0, _reactRedux.connect)(function (store) {
 	  return {
 	    goods: store.goods,
-	    removingVisible: store.removingGood.show,
-	    removingID: store.removingGood.id,
+	    categories: store.categories,
 	    addingVisible: store.addingGood.show,
-	    changingGood: store.changingGood
+	    changingGood: store.changingGood,
+	    addCategoryVisible: store.addingCategory.show,
+	    removingModal: store.removingModal
 	  };
 	}), _dec(_class = function (_React$Component) {
 	  _inherits(Dashboard, _React$Component);
@@ -21511,11 +21522,17 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      _store2.default.dispatch((0, _goodsActions.fetchGoods)());
+	      _store2.default.dispatch((0, _categoryActions.fetchCategories)());
 	    }
 	  }, {
 	    key: 'showAddGoodModal',
 	    value: function showAddGoodModal() {
 	      _store2.default.dispatch({ type: "ADDING_GOOD_MODAL_SHOW" });
+	    }
+	  }, {
+	    key: 'showAddCategoryModal',
+	    value: function showAddCategoryModal() {
+	      _store2.default.dispatch({ type: "ADDING_CATEGORY_MODAL_SHOW" });
 	    }
 	  }, {
 	    key: 'render',
@@ -21526,46 +21543,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-md-2' },
-	          _react2.default.createElement(
-	            'ul',
-	            { className: 'nav nav-stacked' },
-	            _react2.default.createElement(
-	              'li',
-	              { role: 'presentation', className: 'active' },
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#' },
-	                'Категория 1'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              { role: 'presentation' },
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#' },
-	                'Категория 2'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              { role: 'presentation' },
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#' },
-	                'Категория 3'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              { role: 'presentation' },
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#' },
-	                'Без категории'
-	              )
-	            )
-	          )
+	          _react2.default.createElement(_categories2.default, { categories: this.props.categories })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -21575,7 +21553,7 @@
 	            { className: 'row' },
 	            _react2.default.createElement(
 	              'button',
-	              { type: 'button', className: 'btn btn-default btn-lg' },
+	              { type: 'button', className: 'btn btn-default btn-lg', onClick: this.showAddCategoryModal, style: { marginRight: "20px" } },
 	              _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true' }),
 	              _react2.default.createElement(
 	                'span',
@@ -21634,9 +21612,10 @@
 	            )
 	          )
 	        ),
-	        _react2.default.createElement(_removeModal2.default, { visible: this.props.removingVisible, id: this.props.removingID }),
-	        _react2.default.createElement(_addGoodModal2.default, { visible: this.props.addingVisible }),
-	        _react2.default.createElement(_changeGoodModal2.default, { visible: this.props.changingGood.show, good: this.props.changingGood.good })
+	        _react2.default.createElement(_removeModal2.default, { visible: this.props.removingModal.show, id: this.props.removingModal.id, type: this.props.removingModal.type }),
+	        _react2.default.createElement(_addGoodModal2.default, { visible: this.props.addingVisible, categories: this.props.categories }),
+	        _react2.default.createElement(_changeGoodModal2.default, { visible: this.props.changingGood.show, good: this.props.changingGood.good }),
+	        _react2.default.createElement(_addCategoryModal2.default, { visible: this.props.addCategoryVisible })
 	      );
 	    }
 	  }]);
@@ -23258,7 +23237,7 @@
 	
 	function addGood(good) {
 	  return function (dispatch) {
-	    _axios2.default.post('/goods/add', { name: good.name, purchasePrice: good.purchasePrice, price: good.price }).then(function (response) {
+	    _axios2.default.post('/goods/add', { name: good.name, purchasePrice: good.purchasePrice, price: good.price, category: good.category }).then(function (response) {
 	      dispatch({
 	        type: "ADD_GOOD",
 	        newGood: response.data
@@ -24643,22 +24622,81 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.fetchCategories = fetchCategories;
+	exports.removeCategory = removeCategory;
+	exports.addCategory = addCategory;
+	
+	var _axios = __webpack_require__(198);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function fetchCategories() {
+	  return function (dispatch) {
+	    _axios2.default.get('/categories').then(function (response) {
+	      dispatch({
+	        type: "FETCH_CATEGORIES",
+	        payload: response.data
+	      });
+	    });
+	  };
+	}
+	
+	function removeCategory(_id) {
+	  return function (dispatch) {
+	    _axios2.default.post('/categories/remove', { id: _id }).then(function (response) {
+	      dispatch({
+	        type: "REMOVE_CATEGORY",
+	        id: _id
+	      });
+	      dispatch({
+	        type: "REMOVING_MODAL_CLOSE"
+	      });
+	    }).catch(function (error) {
+	      console.log(error);
+	    });
+	  };
+	}
+	
+	function addCategory(name) {
+	  return function (dispatch) {
+	    _axios2.default.post('/categories/add', { name: name }).then(function (response) {
+	      dispatch({
+	        type: "ADD_CATEGORY",
+	        newCategory: response.data
+	      });
+	    }).catch(function (error) {
+	      console.log(error);
+	    });
+	  };
+	}
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _redux = __webpack_require__(181);
 	
-	var _reduxLogger = __webpack_require__(221);
+	var _reduxLogger = __webpack_require__(222);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
-	var _reduxThunk = __webpack_require__(222);
+	var _reduxThunk = __webpack_require__(223);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _reducer = __webpack_require__(223);
+	var _reducer = __webpack_require__(224);
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 	
-	var _reduxPromiseMiddleware = __webpack_require__(226);
+	var _reduxPromiseMiddleware = __webpack_require__(227);
 	
 	var _reduxPromiseMiddleware2 = _interopRequireDefault(_reduxPromiseMiddleware);
 	
@@ -24670,7 +24708,7 @@
 	exports.default = store;
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24903,7 +24941,7 @@
 	module.exports = createLogger;
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24931,7 +24969,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -24940,16 +24978,18 @@
 	  value: true
 	});
 	
-	var _loDash = __webpack_require__(224);
+	var _loDash = __webpack_require__(225);
 	
 	var _loDash2 = _interopRequireDefault(_loDash);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var initialState = {
+	  categories: [],
 	  goods: [],
-	  removingGood: {
+	  removingModal: {
 	    id: null,
+	    type: null,
 	    show: false
 	  },
 	  addingGood: {
@@ -24958,6 +24998,9 @@
 	  changingGood: {
 	    show: false,
 	    good: {}
+	  },
+	  addingCategory: {
+	    show: false
 	  }
 	};
 	
@@ -24992,18 +25035,20 @@
 	
 	    case "REMOVING_MODAL_SHOW":
 	      return Object.assign({}, state, {
-	        removingGood: {
+	        removingModal: {
 	          id: action.id,
-	          show: true
+	          show: true,
+	          type: action.removeType
 	        }
 	      });
 	      break;
 	
 	    case "REMOVING_MODAL_CLOSE":
 	      return Object.assign({}, state, {
-	        removingGood: {
+	        removingModal: {
 	          id: null,
-	          show: false
+	          show: false,
+	          type: null
 	        }
 	      });
 	      break;
@@ -25065,6 +25110,43 @@
 	      });
 	      break;
 	
+	    case "ADDING_CATEGORY_MODAL_SHOW":
+	      return Object.assign({}, state, {
+	        addingCategory: {
+	          show: true
+	        }
+	      });
+	      break;
+	
+	    case "ADDING_CATEGORY_MODAL_CLOSE":
+	      return Object.assign({}, state, {
+	        addingCategory: {
+	          show: false
+	        }
+	      });
+	      break;
+	
+	    case "FETCH_CATEGORIES":
+	      return Object.assign({}, state, {
+	        categories: action.payload
+	      });
+	      break;
+	
+	    case "ADD_CATEGORY":
+	      return Object.assign({}, state, {
+	        addingCategory: {
+	          show: false
+	        },
+	        categories: state.categories.concat(action.newCategory)
+	      });
+	      break;
+	
+	    case "REMOVE_CATEGORY":
+	      var newCategories = _loDash2.default.filter(state.categories, function (cat) {
+	        return cat._id != action.id;
+	      });
+	      return Object.assign({}, state, { categories: newCategories });
+	      break;
 	    default:
 	      return state;
 	  }
@@ -25073,7 +25155,7 @@
 	exports.default = Reducer;
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -41810,10 +41892,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(225)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(226)(module)))
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -41829,7 +41911,7 @@
 
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41846,7 +41928,7 @@
 	
 	exports.default = promiseMiddleware;
 	
-	var _isPromise = __webpack_require__(227);
+	var _isPromise = __webpack_require__(228);
 	
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 	
@@ -42003,7 +42085,7 @@
 	}
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -42024,7 +42106,7 @@
 	}
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42039,7 +42121,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _good = __webpack_require__(229);
+	var _good = __webpack_require__(230);
 	
 	var _good2 = _interopRequireDefault(_good);
 	
@@ -42081,7 +42163,7 @@
 	exports.default = Goods;
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42098,7 +42180,7 @@
 	
 	var _reactRedux = __webpack_require__(174);
 	
-	var _store = __webpack_require__(220);
+	var _store = __webpack_require__(221);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -42122,7 +42204,7 @@
 	  _createClass(Good, [{
 	    key: 'handleClickRemove',
 	    value: function handleClickRemove() {
-	      _store2.default.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.good._id });
+	      _store2.default.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.good._id, removeType: "good" });
 	    }
 	  }, {
 	    key: 'handleClickEdit',
@@ -42186,7 +42268,62 @@
 	exports.default = Good;
 
 /***/ },
-/* 230 */
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _category = __webpack_require__(236);
+	
+	var _category2 = _interopRequireDefault(_category);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Categories = function (_React$Component) {
+	  _inherits(Categories, _React$Component);
+	
+	  function Categories() {
+	    _classCallCheck(this, Categories);
+	
+	    return _possibleConstructorReturn(this, (Categories.__proto__ || Object.getPrototypeOf(Categories)).apply(this, arguments));
+	  }
+	
+	  _createClass(Categories, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: 'list-unstyled' },
+	        this.props.categories.map(function (cat) {
+	          return _react2.default.createElement(_category2.default, { key: cat._id, id: cat._id, name: cat.name });
+	        })
+	      );
+	    }
+	  }]);
+	
+	  return Categories;
+	}(_react2.default.Component);
+	
+	exports.default = Categories;
+
+/***/ },
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42203,7 +42340,9 @@
 	
 	var _goodsActions = __webpack_require__(197);
 	
-	var _store = __webpack_require__(220);
+	var _categoryActions = __webpack_require__(220);
+	
+	var _store = __webpack_require__(221);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -42227,8 +42366,8 @@
 	  _createClass(RemoveModal, [{
 	    key: 'handleClickRemove',
 	    value: function handleClickRemove() {
-	      console.log("Removing is started...");
-	      _store2.default.dispatch((0, _goodsActions.removeGood)(this.props.id));
+	      if (this.props.type == "good") _store2.default.dispatch((0, _goodsActions.removeGood)(this.props.id));
+	      if (this.props.type == "category") _store2.default.dispatch((0, _categoryActions.removeCategory)(this.props.id));
 	    }
 	  }, {
 	    key: 'close',
@@ -42271,7 +42410,9 @@
 	              _react2.default.createElement(
 	                'p',
 	                null,
-	                'Вы точно хотите удалить товар?'
+	                'Вы точно хотите удалить ',
+	                this.props.type == "good" ? "товар" : "категорию",
+	                '?'
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -42300,7 +42441,7 @@
 	exports.default = RemoveModal;
 
 /***/ },
-/* 231 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42317,7 +42458,7 @@
 	
 	var _goodsActions = __webpack_require__(197);
 	
-	var _store = __webpack_require__(220);
+	var _store = __webpack_require__(221);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -42339,15 +42480,6 @@
 	  }
 	
 	  _createClass(AddGoodModal, [{
-	    key: 'setInitialState',
-	    value: function setInitialState() {
-	      return {
-	        name: null,
-	        purchasePrice: null,
-	        price: null
-	      };
-	    }
-	  }, {
 	    key: 'close',
 	    value: function close() {
 	      _store2.default.dispatch({ type: "ADDING_GOOD_MODAL_CLOSE" });
@@ -42371,6 +42503,13 @@
 	    value: function handleChangePrice(e) {
 	      this.setState({
 	        price: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleChangeCategory',
+	    value: function handleChangeCategory(e) {
+	      this.setState({
+	        category: e.target.value
 	      });
 	    }
 	  }, {
@@ -42422,6 +42561,28 @@
 	                  _react2.default.createElement(
 	                    'label',
 	                    null,
+	                    'Категория'
+	                  ),
+	                  _react2.default.createElement(
+	                    'select',
+	                    { className: 'form-control', onChange: this.handleChangeCategory.bind(this) },
+	                    this.props.categories.map(function (cat) {
+	                      return _react2.default.createElement(
+	                        'option',
+	                        { key: cat._id, value: cat._id },
+	                        ' ',
+	                        cat.name,
+	                        ' '
+	                      );
+	                    })
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
 	                    'Название'
 	                  ),
 	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', onChange: this.handleChangeName.bind(this) })
@@ -42465,7 +42626,7 @@
 	exports.default = AddGoodModal;
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42484,7 +42645,7 @@
 	
 	var _reactRedux = __webpack_require__(174);
 	
-	var _store = __webpack_require__(220);
+	var _store = __webpack_require__(221);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -42606,6 +42767,195 @@
 	}(_react2.default.Component);
 	
 	exports.default = ChangeGoodModal;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _store = __webpack_require__(221);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	var _categoryActions = __webpack_require__(220);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var AddCategoryModal = function (_React$Component) {
+	  _inherits(AddCategoryModal, _React$Component);
+	
+	  function AddCategoryModal() {
+	    _classCallCheck(this, AddCategoryModal);
+	
+	    return _possibleConstructorReturn(this, (AddCategoryModal.__proto__ || Object.getPrototypeOf(AddCategoryModal)).apply(this, arguments));
+	  }
+	
+	  _createClass(AddCategoryModal, [{
+	    key: 'close',
+	    value: function close() {
+	      _store2.default.dispatch({ type: "ADDING_CATEGORY_MODAL_CLOSE" });
+	    }
+	  }, {
+	    key: 'handleChangeName',
+	    value: function handleChangeName(e) {
+	      this.setState({
+	        name: e.target.value
+	      });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      e.target.reset();
+	      _store2.default.dispatch((0, _categoryActions.addCategory)(this.state.name));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: this.props.visible ? "visible modal fade in" : "modal fade in", tabIndex: '-1', role: 'dialog' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal-dialog', role: 'document' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'close', onClick: this.close },
+	                _react2.default.createElement(
+	                  'span',
+	                  { 'aria-hidden': 'true' },
+	                  '×'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'h4',
+	                { className: 'modal-title' },
+	                'Добавить Категорию.'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              _react2.default.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit.bind(this) },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    'Название'
+	                  ),
+	                  _react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', onChange: this.handleChangeName.bind(this) })
+	                ),
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'submit', className: 'btn btn-default' },
+	                  'Добавить'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return AddCategoryModal;
+	}(_react2.default.Component);
+	
+	exports.default = AddCategoryModal;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _store = __webpack_require__(221);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Category = function (_React$Component) {
+	  _inherits(Category, _React$Component);
+	
+	  function Category() {
+	    _classCallCheck(this, Category);
+	
+	    return _possibleConstructorReturn(this, (Category.__proto__ || Object.getPrototypeOf(Category)).apply(this, arguments));
+	  }
+	
+	  _createClass(Category, [{
+	    key: 'handleClickRemove',
+	    value: function handleClickRemove() {
+	      _store2.default.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.id, removeType: "category" });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'li',
+	        { style: { marginBottom: "20px" } },
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'btn btn-xs', onClick: this.handleClickRemove.bind(this), style: { marginRight: "20px" } },
+	          _react2.default.createElement('span', { className: 'glyphicon glyphicon-remove' })
+	        ),
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#' },
+	          this.props.name
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Category;
+	}(_react2.default.Component);
+	
+	exports.default = Category;
 
 /***/ }
 /******/ ]);

@@ -4,13 +4,6 @@ import { addGood } from '../actions/goodsActions'
 import store from '../store.js'
 
 class AddGoodModal extends React.Component {
-  setInitialState() {
-      return {
-        name: null,
-        purchasePrice: null,
-        price: null
-      }
-  }
 
   close() {
       store.dispatch({ type: "ADDING_GOOD_MODAL_CLOSE" })
@@ -34,6 +27,12 @@ class AddGoodModal extends React.Component {
       });
   }
 
+  handleChangeCategory(e) {
+      this.setState({
+          category: e.target.value
+      })
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     e.target.reset();
@@ -51,6 +50,16 @@ class AddGoodModal extends React.Component {
             </div>
             <div className="modal-body">
               <form onSubmit={ this.handleSubmit.bind(this) }>
+                <div className="form-group">
+                  <label>Категория</label>
+                    <select className="form-control" onChange={ this.handleChangeCategory.bind(this) }>
+                      {
+                        this.props.categories.map(function(cat) {
+                          return <option key={ cat._id } value={ cat._id }> { cat.name } </option>
+                        })
+                      }
+                    </select>
+                </div>
                 <div className="form-group">
                   <label>Название</label>
                   <input type="text" className="form-control" name="name" onChange={ this.handleChangeName.bind(this) } />

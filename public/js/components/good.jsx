@@ -5,7 +5,7 @@ import store from '../store.js';
 class Good extends React.Component {
 
     handleClickRemove() {
-      store.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.good._id });
+      store.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.good._id , removeType: "good" });
     }
 
     handleClickEdit() {

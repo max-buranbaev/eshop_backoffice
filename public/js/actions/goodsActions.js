@@ -33,7 +33,7 @@ export function removeGood(_id) {
 
 export function addGood(good) {
   return function (dispatch) {
-    axios.post('/goods/add', { name: good.name, purchasePrice: good.purchasePrice, price: good.price })
+    axios.post('/goods/add', { name: good.name, purchasePrice: good.purchasePrice, price: good.price, category: good.category })
       .then(function (response) {
         dispatch({
           type: "ADD_GOOD",

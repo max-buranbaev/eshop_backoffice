@@ -1,12 +1,13 @@
 import React from "react"
 import { removeGood } from '../actions/goodsActions'
+import { removeCategory } from '../actions/categoryActions'
 import store from '../store.js'
 
 class RemoveModal extends React.Component {
 
   handleClickRemove() {
-    console.log("Removing is started...");
-    store.dispatch(removeGood(this.props.id));
+    if(this.props.type == "good") store.dispatch(removeGood(this.props.id));
+    if(this.props.type == "category") store.dispatch(removeCategory(this.props.id));
   }
 
   close() {
@@ -23,7 +24,7 @@ class RemoveModal extends React.Component {
               <h4 className="modal-title">Внимание!</h4>
             </div>
             <div className="modal-body">
-              <p>Вы точно хотите удалить товар?</p>
+              <p>Вы точно хотите удалить { this.props.type == "good" ? "товар" : "категорию" }?</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-default" onClick={ this.close } >Отменить</button>
