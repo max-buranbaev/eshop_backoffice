@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 export function fetchGoods() {
   return function (dispatch) {
     axios.get('/goods')
@@ -48,9 +49,11 @@ export function addGood(good) {
   }
 }
 
-export function changeGood(good) {
+export function changeGood(store) {
   return function (dispatch) {
-    axios.post('/goods/change', { id: good.id, name: good.name, purchasePrice: good.purchasePrice, price: good.price })
+    var currentStore = store.getState();
+
+    axios.post('/goods/change', { good: currentStore.changingGood.good })
       .then(function (response) {
         dispatch({
           type: "CHANGE_GOOD",

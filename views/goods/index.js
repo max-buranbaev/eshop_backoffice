@@ -32,18 +32,19 @@ exports.getDataById = function(req, res, next) {
 
 exports.updateById = function(req, res, next) {
     var Good = req.app.db.models.Good;
+
     var newGoodData = {
-      name: req.body.name,
-      purchasePrice: req.body.purchasePrice,
-      price: req.body.price,
-      category: req.body.category
+      name: req.body.good.name,
+      purchasePrice: Number(req.body.good.purchasePrice),
+      price: Number(req.body.good.price),
+      category: req.body.good.category
     }
+    console.log("GOOD ID IS: " + req.body.good._id);
 
-    console.log(req.params);
-
-    Good.updateDataById(req.body.id, newGoodData, function(err, newGood) {
-      if (err) return next(err);
-      res.status(200).send(newGood);
+    Good.updateDataById(req.body.good._id, newGoodData, function(err, newGood) {
+      console.log("calling callback...");
+      if (err) res.send(500, err);
+      res.send(200, newGood);
     });
 }
 

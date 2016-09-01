@@ -14,7 +14,7 @@ import ChangeGoodModal from './changeGoodModal.jsx'
     removingVisible: store.removingGood.show,
     removingID: store.removingGood.id,
     addingVisible: store.addingGood.show,
-    changing: store.changingGood
+    changingGood: store.changingGood
   }
 })
 
@@ -68,7 +68,7 @@ class Dashboard extends React.Component {
         </div>
         <RemoveModal visible={ this.props.removingVisible } id={ this.props.removingID } />
         <AddGoodModal visible={ this.props.addingVisible } />
-        <ChangeGoodModal visible={ this.props.changing.show } id={ this.props.changing.id } name={ this.props.changing.name } purchasePrice={ this.props.changing.purchasePrice } price={ this.props.changing.price }/>
+        <ChangeGoodModal visible={this.props.changingGood.show} good={this.props.changingGood.good}/>
       </div>
     )
   }

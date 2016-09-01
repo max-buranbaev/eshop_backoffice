@@ -40,7 +40,14 @@ exports = module.exports = function(app, mongoose) {
 
   schema.statics.updateDataById = function(id, newGoodData, callback) {
       var Good = this;
+
       Good.findById(id).exec(function(err, good) {
+
+        if (!good) {
+          return callback(new HttpError(404, "Good not found"));
+        }
+
+        console.log(good);
 
         good.name = newGoodData.name;
         good.purchasePrice = newGoodData.purchasePrice;
@@ -48,6 +55,7 @@ exports = module.exports = function(app, mongoose) {
         good.category = newGoodData.category;
 
         good.save(function(err) {
+          console.log("schema is working... " + err + good);
           if (err) return callback(err);
           return callback(null, good);
         });

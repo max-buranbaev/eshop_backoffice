@@ -8,7 +8,7 @@ class Goods extends React.Component {
         <tbody>
           {
             this.props.goods.map( function(good) {
-              return <Good _id={ good._id } name={ good.name } purchasePrice={ good.purchasePrice } price={ good.price } key={ good._id }/>
+              return <Good good={ good } key={ good._id }/>
             })
           }
         </tbody>

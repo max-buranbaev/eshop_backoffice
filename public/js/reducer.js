@@ -11,12 +11,7 @@ var initialState = {
     },
     changingGood: {
       show: false,
-      good: {
-        id: null,
-        name: null,
-        purchasePrice: null,
-        price: null
-      }
+      good: {}
     }
 }
 
@@ -29,6 +24,18 @@ var Reducer = function(state = initialState, action) {
 
       case "REMOVE_GOOD":
         var newGoods = _.filter(state.goods, (good) => good._id != action.id);
+        return Object.assign({}, state, { goods: newGoods });
+        break;
+
+      case "CHANGE_GOOD":
+        var newGoods = [].concat(state.goods);
+        newGoods.forEach( (good, index) => {
+          if(good._id == state.changingGood.good._id) {
+            newGoods[index].name = state.changingGood.good.name;
+            newGoods[index].purchasePrice = state.changingGood.good.purchasePrice;
+            newGoods[index].price = state.changingGood.good.price;
+          }
+        });
         return Object.assign({}, state, { goods: newGoods });
         break;
 
@@ -76,16 +83,35 @@ var Reducer = function(state = initialState, action) {
       break;
 
       case "CHANGING_GOOD_MODAL_SHOW":
+        console.log("good in reducer is " + action.good._id);
         return Object.assign({}, state, {
           changingGood: {
             show: true,
-            name: action.name,
-            id: action.id,
-            purchasePrice: action.purchasePrice,
-            price: action.price
+            good: action.good
           }
         });
       break;
+
+      case "CHANGING_GOOD_MODAL_CLOSE":
+        return Object.assign({}, state, {
+          changingGood: {
+            show: false,
+            good: {}
+          }
+        });
+        break;
+
+      case "CHANGE_GOOD_FIELD":
+        var newGood = Object.assign({}, state.changingGood.good);
+        _.update(newGood, action.name, (n) => action.value );
+        return Object.assign({}, state, {
+          changingGood: {
+            show: true,
+            good: newGood
+          }
+        });
+        break;
+
 
       default:
         return state;

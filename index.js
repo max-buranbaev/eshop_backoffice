@@ -6,6 +6,7 @@ var path = require('path');
 var app = express();
 
 // DB
+mongoose.Promise = global.Promise;
 app.db = mongoose.createConnection(config.db);
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
