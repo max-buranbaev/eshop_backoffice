@@ -6,6 +6,11 @@ exports = module.exports = function(app, mongoose) {
     name: {
       type: String,
       required: true
+    },
+    siteId: {
+      type: Number,
+      required:true,
+      unique: true
     }
   });
 

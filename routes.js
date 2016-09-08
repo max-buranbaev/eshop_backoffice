@@ -24,5 +24,6 @@ exports = module.exports = function(app) {
   app.post('/categories/add', require('./views/categories/index.js').add);
   app.post('/categories/remove', require('./views/categories/index.js').deleteById);
 
+  app.get('/goods/sync', require('./helpers/sync.js').sync);
 
 }
