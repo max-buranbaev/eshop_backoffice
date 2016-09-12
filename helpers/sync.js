@@ -11,8 +11,21 @@ exports.sync = function(req, res, next) {
 
   request('https://dokis.ru/export.xml', function(error, response, body) {
     parser.parseString(body, function (err, result) {
-      result.shop.categories[0].category.map( (category) => {
-          Category.updateIfNotExists( { id: category.$.id, name: category._.name }, (category) => console.log(category) );
+
+      result.shop.categories[0].category.map( (cat) => {
+          var newCategory = new Category();
+
+
+          console.log(cat.id);
+          newCategory.name = cat._;
+          newCategory.siteId = cat.$.id;
+
+          newCategory.save( (err, category) => {
+              if (err) console.log(err);
+
+              console.log(category);
+          });
+          
       });
       res.status(200).send(result.shop.categories[0].category);
     });
