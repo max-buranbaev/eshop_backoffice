@@ -22,6 +22,11 @@ exports = module.exports = function(app, mongoose) {
     });
   }
 
+  schema.statics.updateIfExists = function(callback) {
+    var Category = this;
+
+  }
+
   app.db.model('Category', schema);
 
 }

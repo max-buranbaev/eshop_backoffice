@@ -13,6 +13,8 @@ exports.sync = function(req, res, next) {
     parser.parseString(body, function (err, result) {
       result.shop.categories[0].category.map( (cat) => {
           var newCategory = new Category();
+
+
           console.log(cat.id);
           newCategory.name = cat._;
           newCategory.siteId = cat.$.id;
