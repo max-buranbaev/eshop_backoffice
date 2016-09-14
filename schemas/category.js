@@ -26,36 +26,28 @@ exports = module.exports = function(app, mongoose) {
 
   }
 
-  schema.statics.add = function(siteId, name, callback) {
+  schema.statics.add = function(category, callback) {
     var Category = this;
 
     var newCategory = new Category();
-    newCategory.name = name;
-    newCategory.siteId = siteId;
-
+    newCategory.name = category.name;
+    newCategory.siteId = category.id;
     newCategory.save( (err, category) => {
-        callback(category);
+        return callback(null, category);
     });
-    
+
   }
 
   schema.statics.checkAndAdd = function(category, callback) {
     var Category = this;
-
-    Category.find({ siteId: category.id }, 'name', function(err, result) {
+    Category.find({ siteId: category.id }, '_id', function(err, findedCategory) {
       if (err) next(err);
-
-      if(_.isEmpty(result)) {
-        this.statics.add(category, callback(category));
+      if(_.isEmpty(findedCategory)) {
+        Category.add(category, callback);
       } else {
-        this.statis.updateById(result, callback(category));
+        Category.update( { siteId: category.id }, { name: category.name }, "", callback)
       }
     });
-
-  }
-
-  schema.statics.updateIfExists = function(callback) {
-    var Category = this;
 
   }
 

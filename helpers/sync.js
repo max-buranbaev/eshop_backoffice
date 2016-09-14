@@ -13,20 +13,20 @@ exports.sync = function(req, res, next) {
     parser.parseString(body, function (err, result) {
 
       result.shop.categories[0].category.map( (cat) => {
-          var newCategory = new Category();
+        var callback = function(err, category) {
+          if(err) next(err);
+          console.log(category);
+        }
 
-
-          console.log(cat.id);
-          newCategory.name = cat._;
-          newCategory.siteId = cat.$.id;
-
-          newCategory.save( (err, category) => {
-              if (err) console.log(err);
-
-              console.log(category);
-          });
-          
+        Category.checkAndAdd(
+          {
+            id: cat.$.id,
+            name: cat._
+          },
+          callback
+        )
       });
+
       res.status(200).send(result.shop.categories[0].category);
     });
   });
