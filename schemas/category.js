@@ -38,6 +38,13 @@ exports = module.exports = function(app, mongoose) {
 
   }
 
+  schema.statics.getIdbySiteId = function(siteId) {
+    var Category = this;
+    Category.find({ siteId: siteId }, '_id', function(err, findedCategory) {
+        return findedCategory;
+    });
+  }
+
   schema.statics.checkAndAdd = function(category, callback) {
     var Category = this;
     Category.find({ siteId: category.id }, '_id', function(err, findedCategory) {
@@ -45,7 +52,7 @@ exports = module.exports = function(app, mongoose) {
       if(_.isEmpty(findedCategory)) {
         Category.add(category, callback);
       } else {
-        Category.update( { siteId: category.id }, { name: category.name }, "", callback)
+        Category.update({ siteId: category.id }, { name: category.name }, "", callback)
       }
     });
 

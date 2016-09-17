@@ -1,5 +1,7 @@
 'use strict'
 
+var _ = require('loDash');
+
 exports = module.exports = function(app, mongoose) {
 
   var schema = mongoose.Schema({
@@ -8,12 +10,16 @@ exports = module.exports = function(app, mongoose) {
       required: true
     },
     purchasePrice: {
-      type: Number,
-      required: true
+      type: Number
     },
     price: {
       type: Number,
       required: true
+    },
+    siteId: {
+      type: Number,
+      require: true,
+      unique: true
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
@@ -39,6 +45,20 @@ exports = module.exports = function(app, mongoose) {
     });
   }
 
+  schema.statics.add = function(good, callback) {
+    var Good = this;
+    var newGood = new Good();
+
+    newGood.name = good.name;
+    newGood.siteId = parseInt(good.id);
+    newGood.purchasePrice = parseInt(good.purchasePrice);
+    newGood.price = parseInt(good.price);
+    newGood.category = good.category;
+    newGood.save( (err, good) => {
+        callback(err, good);
+    });
+  }
+
   schema.statics.updateDataById = function(id, newGoodData, callback) {
       var Good = this;
 
@@ -60,6 +80,19 @@ exports = module.exports = function(app, mongoose) {
         });
 
       });
+  }
+
+  schema.statics.checkAndAdd = function(offer, callback) {
+    var Good = this;
+    Good.find({ siteId: offer.id }, '_id', function(err, findedOffer) {
+      if (err) next(err);
+      if(_.isEmpty(findedOffer)) {
+        Good.add(offer, callback);
+      } else {
+        Good.update({ siteId: offer.id }, { name: offer.name }, "", callback)
+      }
+    });
+
   }
 
   app.db.model('Good', schema);
