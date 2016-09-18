@@ -8,6 +8,10 @@ exports.getAll = function(req, res, next) {
   });
 }
 
+exports.getAllWithCategories = function() {
+    
+}
+
 exports.add = function(req, res, next) {
   var db = req.app.db;
   var Good = db.model('Good');

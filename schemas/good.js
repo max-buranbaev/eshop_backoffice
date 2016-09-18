@@ -30,9 +30,20 @@ exports = module.exports = function(app, mongoose) {
   schema.statics.getAll = function(callback) {
     var Good = this;
     Good.find({}, 'name purchasePrice price siteId').populate('category._id').exec(function(err, goods) {
-      console.log(goods);
       if (err) return callback(err);
       return callback(null, goods);
+    });
+  }
+
+  schema.statics.getByCategory = function(id) {
+    var Good = this;
+    var query = Good.find({ category: id });
+    var promise = query.exec();
+
+    promise.addBack( (err, goods) => {
+      if(err) next(err);
+
+      return goods; 
     });
   }
 
