@@ -21488,31 +21488,31 @@
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _topPanel = __webpack_require__(242);
+	var _topPanel = __webpack_require__(234);
 	
 	var _topPanel2 = _interopRequireDefault(_topPanel);
 	
-	var _goods = __webpack_require__(234);
+	var _goods = __webpack_require__(236);
 	
 	var _goods2 = _interopRequireDefault(_goods);
 	
-	var _categories = __webpack_require__(236);
+	var _categories = __webpack_require__(238);
 	
 	var _categories2 = _interopRequireDefault(_categories);
 	
-	var _removeModal = __webpack_require__(238);
+	var _removeModal = __webpack_require__(240);
 	
 	var _removeModal2 = _interopRequireDefault(_removeModal);
 	
-	var _addGoodModal = __webpack_require__(239);
+	var _addGoodModal = __webpack_require__(241);
 	
 	var _addGoodModal2 = _interopRequireDefault(_addGoodModal);
 	
-	var _changeGoodModal = __webpack_require__(240);
+	var _changeGoodModal = __webpack_require__(242);
 	
 	var _changeGoodModal2 = _interopRequireDefault(_changeGoodModal);
 	
-	var _addCategoryModal = __webpack_require__(241);
+	var _addCategoryModal = __webpack_require__(243);
 	
 	var _addCategoryModal2 = _interopRequireDefault(_addCategoryModal);
 	
@@ -25180,139 +25180,6 @@
 	      return Object.assign({}, state, { goods: action.payload });
 	      break;
 	
-	    case "REMOVE_GOOD":
-	      var newGoods = _loDash2.default.filter(state.goods, function (good) {
-	        return good._id != action.id;
-	      });
-	      return Object.assign({}, state, { goods: newGoods });
-	      break;
-	
-	    case "CHANGE_GOOD":
-	      var newGoods = [].concat(state.goods);
-	      newGoods.forEach(function (good, index) {
-	        if (good._id == state.changingGood.good._id) {
-	          newGoods[index].name = state.changingGood.good.name;
-	          newGoods[index].purchasePrice = state.changingGood.good.purchasePrice;
-	          newGoods[index].price = state.changingGood.good.price;
-	        }
-	      });
-	      return Object.assign({}, state, { goods: newGoods });
-	      break;
-	
-	    case "REMOVING_MODAL_SHOW":
-	      return Object.assign({}, state, {
-	        removingModal: {
-	          id: action.id,
-	          show: true,
-	          type: action.removeType
-	        }
-	      });
-	      break;
-	
-	    case "REMOVING_MODAL_CLOSE":
-	      return Object.assign({}, state, {
-	        removingModal: {
-	          id: null,
-	          show: false,
-	          type: null
-	        }
-	      });
-	      break;
-	
-	    case "ADDING_GOOD_MODAL_SHOW":
-	      return Object.assign({}, state, {
-	        addingGood: {
-	          show: true
-	        }
-	      });
-	      break;
-	
-	    case "ADDING_GOOD_MODAL_CLOSE":
-	      return Object.assign({}, state, {
-	        addingGood: {
-	          show: false
-	        }
-	      });
-	      break;
-	
-	    case "ADD_GOOD":
-	      return Object.assign({}, state, {
-	        addingGood: {
-	          show: false
-	        },
-	        goods: state.goods.concat(action.newGood)
-	      });
-	      break;
-	
-	    case "CHANGING_GOOD_MODAL_SHOW":
-	      console.log("good in reducer is " + action.good._id);
-	      return Object.assign({}, state, {
-	        changingGood: {
-	          show: true,
-	          good: action.good
-	        }
-	      });
-	      break;
-	
-	    case "CHANGING_GOOD_MODAL_CLOSE":
-	      return Object.assign({}, state, {
-	        changingGood: {
-	          show: false,
-	          good: {}
-	        }
-	      });
-	      break;
-	
-	    case "CHANGE_GOOD_FIELD":
-	      var newGood = Object.assign({}, state.changingGood.good);
-	      _loDash2.default.update(newGood, action.name, function (n) {
-	        return action.value;
-	      });
-	      return Object.assign({}, state, {
-	        changingGood: {
-	          show: true,
-	          good: newGood
-	        }
-	      });
-	      break;
-	
-	    case "ADDING_CATEGORY_MODAL_SHOW":
-	      return Object.assign({}, state, {
-	        addingCategory: {
-	          show: true
-	        }
-	      });
-	      break;
-	
-	    case "ADDING_CATEGORY_MODAL_CLOSE":
-	      return Object.assign({}, state, {
-	        addingCategory: {
-	          show: false
-	        }
-	      });
-	      break;
-	
-	    case "FETCH_CATEGORIES":
-	      return Object.assign({}, state, {
-	        categories: action.payload
-	      });
-	      break;
-	
-	    case "ADD_CATEGORY":
-	      return Object.assign({}, state, {
-	        addingCategory: {
-	          show: false
-	        },
-	        categories: state.categories.concat(action.newCategory)
-	      });
-	      break;
-	
-	    case "REMOVE_CATEGORY":
-	      var newCategories = _loDash2.default.filter(state.categories, function (cat) {
-	        return cat._id != action.id;
-	      });
-	      return Object.assign({}, state, { categories: newCategories });
-	      break;
 	    default:
 	      return state;
 	  }
@@ -42287,7 +42154,126 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _good = __webpack_require__(235);
+	var _findingForm = __webpack_require__(235);
+	
+	var _findingForm2 = _interopRequireDefault(_findingForm);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TopPanel = function (_React$Component) {
+	  _inherits(TopPanel, _React$Component);
+	
+	  function TopPanel() {
+	    _classCallCheck(this, TopPanel);
+	
+	    return _possibleConstructorReturn(this, (TopPanel.__proto__ || Object.getPrototypeOf(TopPanel)).apply(this, arguments));
+	  }
+	
+	  _createClass(TopPanel, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'nav',
+	        { className: 'navbar navbar-default' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'navbar-header' },
+	            _react2.default.createElement(
+	              'a',
+	              { className: 'navbar-brand', href: '/' },
+	              _react2.default.createElement('img', { alt: 'Brand', src: '/img/logo.png', style: { height: "30px" } })
+	            )
+	          ),
+	          _react2.default.createElement(_findingForm2.default, null)
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TopPanel;
+	}(_react2.default.Component);
+	
+	exports.default = TopPanel;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var FindingForm = function (_React$Component) {
+	  _inherits(FindingForm, _React$Component);
+	
+	  function FindingForm() {
+	    _classCallCheck(this, FindingForm);
+	
+	    return _possibleConstructorReturn(this, (FindingForm.__proto__ || Object.getPrototypeOf(FindingForm)).apply(this, arguments));
+	  }
+	
+	  _createClass(FindingForm, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "form",
+	        { className: "navbar-form navbar-left", role: "search" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "form-group" },
+	          _react2.default.createElement("input", { type: "text", className: "form-control", placeholder: "Поиск" })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return FindingForm;
+	}(_react2.default.Component);
+	
+	exports.default = FindingForm;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _good = __webpack_require__(237);
 	
 	var _good2 = _interopRequireDefault(_good);
 	
@@ -42329,7 +42315,7 @@
 	exports.default = Goods;
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42419,7 +42405,7 @@
 	exports.default = Good;
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42434,7 +42420,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _category = __webpack_require__(237);
+	var _category = __webpack_require__(239);
 	
 	var _category2 = _interopRequireDefault(_category);
 	
@@ -42474,7 +42460,7 @@
 	exports.default = Categories;
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42541,7 +42527,7 @@
 	exports.default = Category;
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42659,7 +42645,7 @@
 	exports.default = RemoveModal;
 
 /***/ },
-/* 239 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42844,7 +42830,7 @@
 	exports.default = AddGoodModal;
 
 /***/ },
-/* 240 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42987,7 +42973,7 @@
 	exports.default = ChangeGoodModal;
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43107,76 +43093,6 @@
 	}(_react2.default.Component);
 	
 	exports.default = AddCategoryModal;
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TopPanel = function (_React$Component) {
-	  _inherits(TopPanel, _React$Component);
-	
-	  function TopPanel() {
-	    _classCallCheck(this, TopPanel);
-	
-	    return _possibleConstructorReturn(this, (TopPanel.__proto__ || Object.getPrototypeOf(TopPanel)).apply(this, arguments));
-	  }
-	
-	  _createClass(TopPanel, [{
-	    key: "render",
-	    value: function render() {
-	      return _react2.default.createElement(
-	        "nav",
-	        { className: "navbar navbar-default" },
-	        _react2.default.createElement(
-	          "div",
-	          { className: "container" },
-	          _react2.default.createElement(
-	            "div",
-	            { className: "navbar-header" },
-	            _react2.default.createElement(
-	              "a",
-	              { className: "navbar-brand", href: "/" },
-	              _react2.default.createElement("img", { alt: "Brand", src: "/img/logo.png", style: { height: "30px" } })
-	            )
-	          ),
-	          _react2.default.createElement(
-	            "form",
-	            { className: "navbar-form navbar-left", role: "search" },
-	            _react2.default.createElement(
-	              "div",
-	              { className: "form-group" },
-	              _react2.default.createElement("input", { type: "text", className: "form-control", placeholder: "Поиск" })
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return TopPanel;
-	}(_react2.default.Component);
-	
-	exports.default = TopPanel;
 
 /***/ }
 /******/ ]);
