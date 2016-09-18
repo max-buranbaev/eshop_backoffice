@@ -1,23 +1,8 @@
 import _ from 'loDash'
 
 var initialState = {
-    categories: [],
     goods: [],
-    removingModal: {
-      id: null,
-      type: null,
-      show: false
-    },
-    addingGood: {
-      show: false
-    },
-    changingGood: {
-      show: false,
-      good: {}
-    },
-    addingCategory: {
-      show: false
-    }
+    filteredGoods: []
 }
 
 var Reducer = function(state = initialState, action) {

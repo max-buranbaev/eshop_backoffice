@@ -6,20 +6,12 @@ import store from '../store.js'
 
 import TopPanel from './topPanel.jsx'
 import Goods from './goods.jsx'
-import Categories from './categories.jsx'
-import RemoveModal from './removeModal.jsx'
+
 import AddGoodModal from './addGoodModal.jsx'
-import ChangeGoodModal from './changeGoodModal.jsx'
-import AddCategoryModal from './addCategoryModal.jsx'
 
 @connect( (store) => {
   return {
-    goods: store.goods,
-    categories: store.categories,
-    addingVisible: store.addingGood.show,
-    changingGood: store.changingGood,
-    addCategoryVisible: store.addingCategory.show,
-    removingModal: store.removingModal
+    goods: store.goods
   }
 })
 
@@ -27,15 +19,6 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
     store.dispatch(fetchGoods());
-    store.dispatch(fetchCategories());
-  }
-
-  showAddGoodModal() {
-      store.dispatch({type: "ADDING_GOOD_MODAL_SHOW"});
-  }
-
-  showAddCategoryModal() {
-      store.dispatch({type: "ADDING_CATEGORY_MODAL_SHOW"});
   }
 
   render() {
@@ -58,10 +41,6 @@ class Dashboard extends React.Component {
             </table>
           </div>
         </div>
-        <RemoveModal visible={ this.props.removingModal.show} id={ this.props.removingModal.id } type={this.props.removingModal.type} />
-        <AddGoodModal visible={ this.props.addingVisible } categories={ this.props.categories } />
-        <ChangeGoodModal visible={this.props.changingGood.show} good={this.props.changingGood.good} />
-        <AddCategoryModal visible={this.props.addCategoryVisible } />
       </div>
     )
   }
