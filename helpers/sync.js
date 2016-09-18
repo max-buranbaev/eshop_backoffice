@@ -4,6 +4,7 @@ var request = require("request");
 var fs = require("fs");
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
+var getAll = require('../views/goods/index.js').getAll
 
 exports.sync = function(req, res, next) {
   var db = req.app.db;
@@ -40,12 +41,12 @@ exports.sync = function(req, res, next) {
             price: offer.price[0],
             categorySite: Category.getIdbySiteId(offer.id)
           },
-          callback
+          function() {
+            return getAll(req, res, next);
+          }
         )
 
       });
-
-      res.status(200).send(result.shop.offers[0].offer);
     });
   });
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from "react-redux"
 import { fetchGoods } from '../actions/goodsActions'
-import { fetchCategories } from '../actions/categoryActions'
 import store from '../store.js'
 
 import TopPanel from './topPanel.jsx'
@@ -11,7 +10,7 @@ import AddGoodModal from './addGoodModal.jsx'
 
 @connect( (store) => {
   return {
-    goods: store.goods
+    goods: store.filteredGoods
   }
 })
 
@@ -26,7 +25,7 @@ class Dashboard extends React.Component {
       <div>
         <TopPanel />
         <div className="col-md-12">
-          <div className="row" style={{ paddingTop: "20px" }}>
+          <div className="row">
             <table className="table table-hover">
               <thead>
                 <tr>

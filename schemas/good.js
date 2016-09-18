@@ -55,7 +55,7 @@ exports = module.exports = function(app, mongoose) {
     newGood.price = parseInt(good.price);
     newGood.category = good.category;
     newGood.save( (err, good) => {
-        callback(err, good);
+        callback();
     });
   }
 
@@ -76,7 +76,7 @@ exports = module.exports = function(app, mongoose) {
 
         good.save(function(err) {
           if (err) return callback(err);
-          return callback(null, good);
+          return callback();
         });
 
       });
@@ -90,7 +90,6 @@ exports = module.exports = function(app, mongoose) {
       if(_.isEmpty(findedOffer)) {
         Good.add(offer, callback);
       } else {
-        debugger;
         Good.update({ siteId: offer.id }, { name: offer.name, purchasePrice: offer.purchasePrice, price: offer.price }, "", callback)
       }
     });
