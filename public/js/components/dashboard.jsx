@@ -4,6 +4,7 @@ import { fetchGoods } from '../actions/goodsActions'
 import { fetchCategories } from '../actions/categoryActions'
 import store from '../store.js'
 
+import TopPanel from './topPanel.jsx'
 import Goods from './goods.jsx'
 import Categories from './categories.jsx'
 import RemoveModal from './removeModal.jsx'
@@ -40,29 +41,16 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
-        <div className="col-md-2">
-          <Categories categories={ this.props.categories } />
-        </div>
-        <div className="col-md-10">
-          <div className="row">
-            <button type="button" className="btn btn-default btn-lg" onClick={this.showAddCategoryModal} style={{ marginRight: "20px" }}>
-              <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
-              <span>Добавить категорию</span>
-            </button>
-            <button type="button" className="btn btn-default btn-lg" onClick={this.showAddGoodModal}>
-              <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
-              <span>Добавить товар</span>
-            </button>
-          </div>
+        <TopPanel />
+        <div className="col-md-12">
           <div className="row" style={{ paddingTop: "20px" }}>
             <table className="table table-hover">
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Название</th>
-                  <th>Цена закупки</th>
-                  <th>Цена продажи</th>
-                  <th></th>
+                  <th>Покупка</th>
+                  <th>Продажа</th>
                   <th></th>
                 </tr>
               </thead>

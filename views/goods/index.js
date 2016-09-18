@@ -4,7 +4,7 @@ exports.getAll = function(req, res, next) {
   var Good = req.app.db.models.Good;
   Good.getAll(function(err, goods) {
     if (err) return next(err);
-    res.status(200).send(goods);
+    res.send(200, goods);
   });
 }
 

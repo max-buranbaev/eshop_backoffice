@@ -21488,6 +21488,10 @@
 	
 	var _store2 = _interopRequireDefault(_store);
 	
+	var _topPanel = __webpack_require__(242);
+	
+	var _topPanel2 = _interopRequireDefault(_topPanel);
+	
 	var _goods = __webpack_require__(234);
 	
 	var _goods2 = _interopRequireDefault(_goods);
@@ -21560,38 +21564,10 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement(_topPanel2.default, null),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-2' },
-	          _react2.default.createElement(_categories2.default, { categories: this.props.categories })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-10' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
-	            _react2.default.createElement(
-	              'button',
-	              { type: 'button', className: 'btn btn-default btn-lg', onClick: this.showAddCategoryModal, style: { marginRight: "20px" } },
-	              _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true' }),
-	              _react2.default.createElement(
-	                'span',
-	                null,
-	                'Добавить категорию'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'button',
-	              { type: 'button', className: 'btn btn-default btn-lg', onClick: this.showAddGoodModal },
-	              _react2.default.createElement('span', { className: 'glyphicon glyphicon-plus', 'aria-hidden': 'true' }),
-	              _react2.default.createElement(
-	                'span',
-	                null,
-	                'Добавить товар'
-	              )
-	            )
-	          ),
+	          { className: 'col-md-12' },
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'row', style: { paddingTop: "20px" } },
@@ -21617,14 +21593,13 @@
 	                  _react2.default.createElement(
 	                    'th',
 	                    null,
-	                    'Цена закупки'
+	                    'Покупка'
 	                  ),
 	                  _react2.default.createElement(
 	                    'th',
 	                    null,
-	                    'Цена продажи'
+	                    'Продажа'
 	                  ),
-	                  _react2.default.createElement('th', null),
 	                  _react2.default.createElement('th', null)
 	                )
 	              ),
@@ -23401,6 +23376,7 @@
 	function fetchGoods() {
 	  return function (dispatch) {
 	    _axios2.default.get('/goods').then(function (response) {
+	      console.log(response.data);
 	      dispatch({
 	        type: "FETCH_GOODS",
 	        payload: response.data
@@ -42397,12 +42373,6 @@
 	      _store2.default.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.good._id, removeType: "good" });
 	    }
 	  }, {
-	    key: 'handleClickEdit',
-	    value: function handleClickEdit() {
-	      console.log(this.state);
-	      _store2.default.dispatch({ type: "CHANGING_GOOD_MODAL_SHOW", good: this.props.good });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -42411,7 +42381,7 @@
 	        _react2.default.createElement(
 	          'td',
 	          null,
-	          this.props.good._id
+	          this.props.good.siteId
 	        ),
 	        _react2.default.createElement(
 	          'td',
@@ -42433,17 +42403,8 @@
 	          null,
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.handleClickEdit.bind(this), className: 'btn btn-xs' },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'td',
-	          null,
-	          _react2.default.createElement(
-	            'button',
 	            { onClick: this.handleClickRemove.bind(this), className: 'btn btn-xs' },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-remove' })
+	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-usd' })
 	          )
 	        )
 	      );
@@ -43146,6 +43107,76 @@
 	}(_react2.default.Component);
 	
 	exports.default = AddCategoryModal;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TopPanel = function (_React$Component) {
+	  _inherits(TopPanel, _React$Component);
+	
+	  function TopPanel() {
+	    _classCallCheck(this, TopPanel);
+	
+	    return _possibleConstructorReturn(this, (TopPanel.__proto__ || Object.getPrototypeOf(TopPanel)).apply(this, arguments));
+	  }
+	
+	  _createClass(TopPanel, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "nav",
+	        { className: "navbar navbar-default" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "container" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "navbar-header" },
+	            _react2.default.createElement(
+	              "a",
+	              { className: "navbar-brand", href: "/" },
+	              _react2.default.createElement("img", { alt: "Brand", src: "/img/logo.png", style: { height: "30px" } })
+	            )
+	          ),
+	          _react2.default.createElement(
+	            "form",
+	            { className: "navbar-form navbar-left", role: "search" },
+	            _react2.default.createElement(
+	              "div",
+	              { className: "form-group" },
+	              _react2.default.createElement("input", { type: "text", className: "form-control", placeholder: "Поиск" })
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TopPanel;
+	}(_react2.default.Component);
+	
+	exports.default = TopPanel;
 
 /***/ }
 /******/ ]);

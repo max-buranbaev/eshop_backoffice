@@ -5,6 +5,7 @@ export function fetchGoods() {
   return function (dispatch) {
     axios.get('/goods')
       .then( (response) => {
+        console.log(response.data);
         dispatch({
           type: "FETCH_GOODS",
           payload: response.data

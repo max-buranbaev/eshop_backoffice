@@ -29,7 +29,7 @@ exports = module.exports = function(app, mongoose) {
 
   schema.statics.getAll = function(callback) {
     var Good = this;
-    Good.find({}, 'name purchasePrice price').populate('category._id').exec(function(err, goods) {
+    Good.find({}, 'name purchasePrice price siteId').populate('category._id').exec(function(err, goods) {
       console.log(goods);
       if (err) return callback(err);
       return callback(null, goods);
@@ -84,12 +84,14 @@ exports = module.exports = function(app, mongoose) {
 
   schema.statics.checkAndAdd = function(offer, callback) {
     var Good = this;
+
     Good.find({ siteId: offer.id }, '_id', function(err, findedOffer) {
       if (err) next(err);
       if(_.isEmpty(findedOffer)) {
         Good.add(offer, callback);
       } else {
-        Good.update({ siteId: offer.id }, { name: offer.name }, "", callback)
+        debugger;
+        Good.update({ siteId: offer.id }, { name: offer.name, purchasePrice: offer.purchasePrice, price: offer.price }, "", callback)
       }
     });
 
