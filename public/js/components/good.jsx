@@ -4,18 +4,20 @@ import store from '../store.js';
 
 class Good extends React.Component {
 
-    handleClickRemove() {
-      store.dispatch({ type: "REMOVING_MODAL_SHOW", id: this.props.good._id , removeType: "good" });
+    showSelling() {
+      store.dispatch({ type: "SELLING_CHANGE_MODAL_STATE", visible: true, good: this.props.good });
     }
 
     render() {
       return (
         <tr>
-          <td>{this.props.good.siteId}</td>
-          <td>{this.props.good.name}</td>
-          <td>{this.props.good.purchasePrice}</td>
-          <td>{this.props.good.price}</td>
-          <td><button onClick={ this.handleClickRemove.bind(this) } className="btn btn-xs"><span className="glyphicon glyphicon-usd"></span></button></td>
+          <td className="hidden-xs">{ this.props.good.siteId }</td>
+          <td>{ this.props.good.name }</td>
+          <td>{ this.props.good.purchasePrice }</td>
+          <td>{ this.props.good.price }</td>
+          <td>
+            <button onClick={ this.showSelling.bind(this) } className="btn btn-xs btn-success">продажа</button>
+          </td>
         </tr>
       )
     }

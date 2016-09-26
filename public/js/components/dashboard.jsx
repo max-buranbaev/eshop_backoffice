@@ -6,7 +6,7 @@ import store from '../store.js'
 import TopPanel from './topPanel.jsx'
 import Goods from './goods.jsx'
 
-import AddGoodModal from './addGoodModal.jsx'
+import AddSellingModal from './addSellingModal.jsx'
 
 @connect( (store) => {
   return {
@@ -29,10 +29,16 @@ class Dashboard extends React.Component {
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th className="hidden-xs">ID</th>
                   <th>Название</th>
-                  <th>Покупка</th>
-                  <th>Продажа</th>
+                  <th>
+                    <span className="hidden-xs hidden-sm">Покупка</span>
+                    <span className="hidden-md hidden-lg">Пок</span>
+                  </th>
+                  <th>
+                    <span className="hidden-xs hidden-sm">Продажа</span>
+                    <span className="hidden-md hidden-lg">Про</span>
+                  </th>
                   <th></th>
                 </tr>
               </thead>
@@ -40,6 +46,7 @@ class Dashboard extends React.Component {
             </table>
           </div>
         </div>
+        <AddSellingModal />
       </div>
     )
   }
