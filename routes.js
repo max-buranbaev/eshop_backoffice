@@ -24,7 +24,9 @@ exports = module.exports = function(app) {
   app.post('/categories/add', require('./views/categories/index.js').add);
   app.post('/categories/remove', require('./views/categories/index.js').deleteById);
 
-  app.put('/selling/', require('./views/sellings/index.js').addSelling);
+  app.get('/sales/', require('./views/sellings/index.js').getAll);
+  app.put('/sales/', require('./views/sellings/index.js').addSelling);
+  app.delete('/sales/:id', require('./views/sellings/index.js').deleteSelling)
 
   app.post('/goods/sync', require('./helpers/sync.js').sync);
 
