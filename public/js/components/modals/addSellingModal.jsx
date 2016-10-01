@@ -1,8 +1,8 @@
-import React from "react"
-import store from '../store.js'
+import React from 'react'
+import store from '../../store.js'
 
-import { removeGood } from '../actions/goodsActions'
-import { addSelling } from '../actions/sellingActions'
+import { removeGood } from '../../actions/goods'
+import { addSelling } from '../../actions/sales'
 import { connect } from 'react-redux'
 
 
@@ -48,7 +48,8 @@ class AddSellingModal extends React.Component {
                   <label>Источник</label>
                   <select ref="source" className="form-control">
                     <option value="1">Интернет</option>
-                    <option value="2">Оффлайн</option>
+                    <option value="2">Больница</option>
+                    <option value="3">Газета</option>
                   </select>
                 </div>
                 <button type="submit" className="btn btn-success">Добавить</button>
@@ -63,8 +64,8 @@ class AddSellingModal extends React.Component {
 
 var getProps = function(state) {
   return {
-    good: state.selling.good,
-    visible: state.selling.visible  
+    good: state.sales.selling.good,
+    visible: state.sales.selling.visible
   }
 }
 
