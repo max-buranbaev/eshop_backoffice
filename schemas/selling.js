@@ -20,5 +20,13 @@ exports = module.exports = function(app, mongoose) {
 		}
 	})
 
+	schema.statics.getAll = function(callback) {
+	  var Selling = this;
+	  Selling.find().populate('good', 'name').exec(function(err, sales) {
+		if (err) return callback(err);
+		return callback(null, sales);
+	  });
+	}
+
 	app.db.model('Selling', schema);
 };
