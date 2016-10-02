@@ -28,6 +28,6 @@ exports = module.exports = function(app) {
   app.put('/sales/', require('./views/sellings/index.js').addSelling);
   app.delete('/sales/:id', require('./views/sellings/index.js').deleteSelling)
 
-  app.post('/goods/sync', require('./helpers/sync.js').sync);
+  app.get('/goods/sync/', require('./helpers/sync.js').sync);
 
 }

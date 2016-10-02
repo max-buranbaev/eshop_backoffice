@@ -1,5 +1,5 @@
 export const FETCH_GOODS_URI = "/goods/"
-export const SYNC_GOODS_URI = "/goods/sync"
+export const SYNC_GOODS_URI = "/goods/sync/"
 
 export const FETCH_SALES_URI = "/sales/"
 export const ADD_SELLING_URI = "/sales/"

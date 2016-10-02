@@ -1,5 +1,6 @@
 import React from 'react'
 import store from '../../store.js'
+import moment from 'moment'
 
 import { removeGood } from '../../actions/goods'
 import { addSelling } from '../../actions/sales'
@@ -19,7 +20,8 @@ class AddSellingModal extends React.Component {
     var selling = {
       id: this.props.good._id,
       phone: this.refs.phone.value,
-      source: this.refs.source.value
+      source: this.refs.source.value,
+      date: moment(this.refs.date.value, "DD.MM.YYYY")
     }
 
     store.dispatch(addSelling(selling));
@@ -43,6 +45,10 @@ class AddSellingModal extends React.Component {
                   </p>
                   <label>Телефон</label>
                   <input type="text" className="form-control" ref="phone"/>
+                </div>
+                <div className="form-group">
+                    <label>Дата в формате 01.02.2016</label>
+                    <input type="text" className="form-control" ref="date" required />
                 </div>
                 <div className="form-group">
                   <label>Источник</label>

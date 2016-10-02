@@ -8,7 +8,7 @@ exports.addSelling = function(req, res, next) {
     newSelling.good = req.body.id;
     newSelling.phone = req.body.phone;
     newSelling.source = req.body.source;
-    newSelling.date = Date.now();
+    newSelling.date = req.body.date;
 
     newSelling.save(function(err, selling) {
         if (err) next(err);
