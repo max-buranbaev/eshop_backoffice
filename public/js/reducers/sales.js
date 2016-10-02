@@ -1,4 +1,4 @@
-import _ from 'loDash'
+import _ from 'lodash'
 
 var initialState = {
     selling: {

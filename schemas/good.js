@@ -1,6 +1,6 @@
 'use strict'
 
-var _ = require('loDash');
+var _ = require('lodash');
 
 exports = module.exports = function(app, mongoose) {
 

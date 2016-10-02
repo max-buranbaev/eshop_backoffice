@@ -1,6 +1,6 @@
 import React from 'react'
 import store from '../../store.js'
-import _ from 'loDash'
+import _ from 'lodash'
 
 class FindingForm extends React.Component {
   handleChange(e) {
