@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import Layout from './components/Layout'
 import Catalog from './components/catalog/catalog.jsx'
 import SalesTable from './components/sales/salesTable.jsx'
-import Statistics from './components/statistics/Statistics.jsx'
+import Statistics from './components/statistics/statistics.jsx'
 import store from './store.js'
 import axios from 'axios'
 
