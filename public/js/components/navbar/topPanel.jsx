@@ -27,6 +27,9 @@ class TopPanel extends React.Component {
                         <li>
                             <Link to="/sales">Продажи</Link>
                         </li>
+                        <li>
+                            <Link to="/statistics">Статистика</Link>
+                        </li>
                     </ul>
                     <FindingForm/>
                     <button type="button" className="btn btn-default navbar-btn navbar-right hidden-xs" style={{

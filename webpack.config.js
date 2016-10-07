@@ -20,5 +20,6 @@ module.exports = {
                 plugins: ['transform-decorators-legacy']
             }
         }]
-    }
+    },
+    watch: true
 }
