@@ -49,14 +49,14 @@ const getProps = (store) => {
     store.sales.sales.map( (sale) => {
         let month = moment(sale.date).month();
         let year = moment(sale.date).year();
-        let key = month + '/' + year;
+        let key = (month + 1) + '/' + year;
         if(!months[key]) {
             months[key] = {
-                cashflow: sale.good.purchasePrice,
+                cashflow: sale.good.price,
                 profit: (sale.good.price - sale.good.purchasePrice)
             };
         } else {
-            months[key].cashflow += sale.good.purchasePrice;
+            months[key].cashflow += sale.good.price;
             months[key].profit += (sale.good.price - sale.good.purchasePrice);
         }
     })
