@@ -4,8 +4,9 @@ import Layout from './components/Layout'
 import Catalog from './components/catalog/catalog.jsx'
 import SalesTable from './components/sales/salesTable.jsx'
 import Statistics from './components/statistics/statistics.jsx'
+import Expenditures from './components/expenditures/expenditures.jsx'
 import store from './store.js'
-import axios from 'axios'
+
 
 import { Provider } from 'react-redux'
 import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router'
@@ -17,6 +18,7 @@ const router = (
                 <IndexRoute component={ Catalog }></IndexRoute>
                 <Route path="/sales" component={ SalesTable }></Route>
                 <Route path="/statistics" component={ Statistics }></Route>
+                <Route path="/expenditures" component={ Expenditures }></Route>
             </Route>
         </Router>
     </Provider>
