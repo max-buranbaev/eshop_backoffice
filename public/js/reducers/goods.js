@@ -28,7 +28,7 @@ var Reducer = function(state = initialState, action) {
                 if (o.price == action.filterString || o.purchasePrice == action.filterString || o.name.toLowerCase().match(action.filterString)) {
                     return true;
                 }
-            })
+            });
 
             return Object.assign({}, state, {
                 filteredGoods: filteredGoods
