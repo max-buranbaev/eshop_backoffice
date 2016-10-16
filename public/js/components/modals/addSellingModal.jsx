@@ -2,7 +2,6 @@ import React from 'react'
 import store from '../../store.js'
 import moment from 'moment'
 
-import { removeGood } from '../../actions/goods'
 import { addSelling } from '../../actions/sales'
 import { connect } from 'react-redux'
 
