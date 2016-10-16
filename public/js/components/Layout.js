@@ -2,7 +2,6 @@ import React from 'react'
 import TopPanel from './navbar/topPanel.jsx'
 import store from '../store.js'
 
-import { connect } from "react-redux"
 import { fetchGoods } from '../actions/goods'
 
 var Layout = React.createClass({
@@ -22,6 +21,6 @@ var Layout = React.createClass({
             </div>
         )
     }
-})
+});
 
 export default Layout;

@@ -1,8 +1,8 @@
 import React from 'react'
 import FindingForm from './findingForm.jsx'
 import store from '../../store.js'
-import { syncGoods } from '../../actions/goods.js'
-import { Link } from 'react-router'
+import {syncGoods} from '../../actions/goods.js'
+import {Link} from 'react-router'
 
 class TopPanel extends React.Component {
     handleClick() {
@@ -29,6 +29,9 @@ class TopPanel extends React.Component {
                         </li>
                         <li>
                             <Link to="/statistics">Статистика</Link>
+                        </li>
+                        <li>
+                            <Link to="/expenditures">Расходы</Link>
                         </li>
                     </ul>
                     <FindingForm/>
