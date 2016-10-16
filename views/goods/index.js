@@ -1,16 +1,16 @@
-'use strict'
+'use strict';
 
 exports.getAll = function(req, res, next) {
   var Good = req.app.db.models.Good;
   Good.getAll(function(err, goods) {
     if (err) return next(err);
-    res.send(200, goods);
+    res.status(200).send(goods);
   });
-}
+};
 
 exports.getAllWithCategories = function() {
     
-}
+};
 
 exports.add = function(req, res, next) {
   var db = req.app.db;
@@ -20,11 +20,11 @@ exports.add = function(req, res, next) {
   newGood.name = req.body.name;
   newGood.purchasePrice = req.body.purchasePrice;
   newGood.price = req.body.price;
-  newGood.category = "57c2ca1c22af4ce40c51a9e2",
+  newGood.category = "57c2ca1c22af4ce40c51a9e2";
   newGood.save( (err, good) => {
-      res.send(200, good);
-  });
-}
+      res.status(200).send(good);
+  })
+};
 
 exports.getDataById = function(req, res, next) {
   var Good = req.app.db.models.Good;
@@ -32,7 +32,7 @@ exports.getDataById = function(req, res, next) {
     if (err) return next(err);
     res.status(200).send(good);
   });
-}
+};
 
 exports.updateById = function(req, res, next) {
     var Good = req.app.db.models.Good;
@@ -42,7 +42,7 @@ exports.updateById = function(req, res, next) {
       purchasePrice: Number(req.body.good.purchasePrice),
       price: Number(req.body.good.price),
       category: req.body.good.category
-    }
+    };
     console.log("GOOD ID IS: " + req.body.good._id);
 
     Good.updateDataById(req.body.good._id, newGoodData, function(err, newGood) {
@@ -50,7 +50,7 @@ exports.updateById = function(req, res, next) {
       if (err) res.send(500, err);
       res.send(200, newGood);
     });
-}
+};
 
 exports.deleteById = function(req, res, next) {
   var Good = req.app.db.models.Good;
@@ -62,4 +62,4 @@ exports.deleteById = function(req, res, next) {
       res.status(200).send(req.body.id).end();
     }
   });
-}
+};

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 exports = module.exports = function(app, mongoose) {
 
@@ -18,7 +18,7 @@ exports = module.exports = function(app, mongoose) {
 		source: {
 			type: String
 		}
-	})
+	});
 
 	schema.statics.getAll = function(callback) {
 	  var Selling = this;
@@ -26,7 +26,7 @@ exports = module.exports = function(app, mongoose) {
 		if (err) return callback(err);
 		return callback(null, sales);
 	  });
-	}
+	};
 
 	app.db.model('Selling', schema);
 };
