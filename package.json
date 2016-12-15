@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "webpack & node index.js",
     "dev-front": "webpack --watch & forever index.js",
-    "dev-back": "webpack & forever -w index.js"
+    "dev-back": "webpack & forever -w index.js",
+    "debug": "node debug index.js"
   },
   "repository": {
     "type": "git",
