@@ -1,11 +1,11 @@
-export const FETCH_GOODS_URI = "/goods/";
-export const SYNC_GOODS_URI = "/goods/sync/";
+export const FETCH_GOODS_URI = "/api/goods/";
+export const SYNC_GOODS_URI = "/api/goods/sync/";
 
-export const FETCH_SALES_URI = "/sales/";
-export const ADD_SELLING_URI = "/sales/";
-export const DELETE_SELLING_URI = "/sales/";
+export const FETCH_SALES_URI = "/api/sales/";
+export const ADD_SELLING_URI = "/api/sales/";
+export const DELETE_SELLING_URI = "/api/sales/";
 
-export const EXPENDITURE_URI = "/expenditures/";
+export const EXPENDITURE_URI = "/api/expenditures/";
 
 export function getSource(source) {
     switch (parseInt(source)) {
