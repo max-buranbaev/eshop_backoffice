@@ -1,3 +1,2 @@
-"use strict"
-exports.port = process.env.PORT || 8080;
+exports.port = process.env.PORT || 5000;
 exports.db = 'mongodb://localhost/test';

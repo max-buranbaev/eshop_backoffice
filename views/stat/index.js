@@ -4,9 +4,9 @@ const StatGenerator = require('./StatGenerator');
 
 exports.getAll = (req, res, next) => {
     const Selling = req.app.db.models.Selling;
-
-    const startDate = moment(req.body.startDate, "DD.MM.YYYY");
-    const endDate = moment(req.body.endDate, "DD.MM.YYYY");
+    console.log(req.body);
+    const startDate = moment(req.body.item.startDate, "DD.MM.YYYY");
+    const endDate = moment(req.body.item.endDate, "DD.MM.YYYY");
     const yaMetrikApi = `https://api-metrika.yandex.ru/stat/v1/data.json?id=32372795&date1=${startDate.format("YYYY-MM-DD")}&date2=${endDate.format("YYYY-MM-DD")}&metrics=ym:s:users&dimensions=ym:s:<attribution>TrafficSource&oauth_token=AQAAAAAT0xGsAAPpjNcTKg7nkUIJi7UFsCNRKcw`;
 
     const callback = (err, data) => {
@@ -29,12 +29,14 @@ exports.getAll = (req, res, next) => {
                     endDate: endDate
                 },
                 stat: {
-                    averageCheck: Stat.getAverageCheck(),
-                    averageMarginPercent: Stat.getAverageMarginPercent(),
-                    conversion: (data.length / sumOfVisitors) * 100
+                    averageCheck: Stat.averageCheck,
+                    averageMarginPercent: Stat.averageMarginPercent,
+                    conversion: Math.round((data.length / sumOfVisitors) * 10000) / 100,
+                    profit: Stat.profit,
+                    cashflow: Stat.cashFlow,
+                    sumOfSales: Stat.sumOfSales
                 }
             };
-
 
             res.send(result);
         });

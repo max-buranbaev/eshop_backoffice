@@ -2,19 +2,22 @@ module.exports = class StatGenerator {
 
     constructor(data) {
         this.data = data;
-    }
 
-    getAverageCheck() {
-        let sumOfSellings = null;
-        this.data.map((selling) => sumOfSellings += selling.good.price);
-        return sumOfSellings / this.data.length;
-    }
-
-    getAverageMarginPercent() {
+        let cashFlow = null;
         let sumOfMarginPercents = null;
-        this.data.map((selling) => {
-            sumOfMarginPercents += 100 * (selling.good.price / selling.good.purchasePrice);
+        let goodsCost = null;
+
+        this.data.map(selling => {
+            cashFlow += selling.good.price;
+            sumOfMarginPercents = 100 * (selling.good.price / selling.good.purchasePrice);
+            goodsCost += selling.good.purchasePrice;
         });
-        return sumOfMarginPercents / this.data.length;
+
+        this.sumOfSales = this.data.length;
+        this.averageCheck = Math.round((cashFlow / this.data.length) * 100) / 100;
+        this.averageMarginPercent = Math.round((sumOfMarginPercents / this.data.length) * 100) / 100;
+        this.profit = cashFlow - goodsCost;
+        this.cashFlow = cashFlow;
     }
+
 };

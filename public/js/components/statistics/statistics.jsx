@@ -1,85 +1,100 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { fetchSales } from '../../actions/sales'
-import { read } from '../../actions/expenditures'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {createCustomReport} from '../../actions/stat'
 import store from '../../store'
 import moment from 'moment'
 
 class Statistics extends Component {
-    componentWillMount() {
-        store.dispatch(fetchSales());
-        store.dispatch(read());
+    constructor(props) {
+        super(props);
+        this.state = {
+            from: moment().month(-1).format("DD.MM.YYYY"),
+            to: moment().format("DD.MM.YYYY")
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleCreateReport = this.handleCreateReport.bind(this);
+        this.getCustomReport = this.getCustomReport.bind(this);
+    }
+
+    handleChange(ev) {
+        this.setState({
+            [ev.target.name]: ev.target.value
+        });
+    }
+
+    handleCreateReport(ev) {
+        ev.preventDefault();
+        store.dispatch(createCustomReport(this.state.from, this.state.to));
+    }
+
+    getCustomReport() {
+        const {stat} = this.props.stat.customReport;
+        return (
+            <div className="row" style={{"marginTop": "40px"}}>
+                <div className="col-md-12">
+                    <table className="table">
+                        <tbody>
+                        <tr>
+                            <th>Оборот</th>
+                            <th>Прибыль</th>
+                            <th>Средний чек</th>
+                            <th>Средняя наценка</th>
+                            <th>Кол. Продаж</th>
+                            <th>Конверсия</th>
+                        </tr>
+                        <tr>
+                            <td>{stat.cashflow} ₽</td>
+                            <td>{stat.profit} ₽</td>
+                            <td>{stat.averageCheck} ₽</td>
+                            <td>{stat.averageMarginPercent} %</td>
+                            <td>{stat.sumOfSales} </td>
+                            <td>{stat.conversion} %</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        )
     }
 
     render() {
-        const { sales } = this.props;
-        console.log(sales );
-        const rows = [];
-        for(let month in sales) {
-            let netProfit = sales[month].profit - sales[month].expenditures;
-            rows.push(
-                <tr key={ month }>
-                    <td><b>{ sales[month].monthTranslated }</b></td>
-                    <td>{ sales[month].cashflow } ₽</td>
-                    <td>{ sales[month].profit } ₽</td>
-                    <td>{ netProfit }</td>
-                </tr>
-            )
-
-        }
         return (
-            <div className="col-md-12">
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <td>Месяц</td>
-                            <td>Оборот</td>
-                            <td>Прибыль</td>
-                            <td>Чистая прибыль</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { rows }
-                    </tbody>
-                </table>
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-12">
+                        <form className="form-inline" onSubmit={this.handleCreateReport}>
+                            <div className="form-group">
+                                <label htmlFor="from">От</label>
+                                <input onChange={this.handleChange}
+                                       type="text" name="from"
+                                       className="form-control"
+                                       id="from"
+                                       placeholder="01.10.2016"
+                                       defaultValue={this.state.from}/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="to">До</label>
+                                <input onChange={this.handleChange}
+                                       type="text" name="to"
+                                       className="form-control"
+                                       id="to"
+                                       defaultValue={this.state.to}/>
+                            </div>
+                            <button type="submit" className="btn btn-default">Сформировать</button>
+                        </form>
+                    </div>
+                </div>
+                { this.props.stat.customReport ? this.getCustomReport() : "" }
             </div>
         )
     }
 }
 
-const getProps = (store) => {
-    var expenditureMonths = {};
-    store.expenditures.list.map((expenditure) => {
-        let { date, amount } = expenditure;
-        let key = moment(date).format("MMMM");
-        if(!expenditureMonths[key]) {
-            expenditureMonths[key] = amount;
-        } else {
-            expenditureMonths[key] += amount;
-        }
-    });
-
-    var months = {};
-    store.sales.sales.map( (sale) => {
-        let key = moment(sale.date).format("MMMM");
-        if(!months[key]) {
-            months[key] = {
-                monthTranslated: moment(sale.date).locale('ru').format("MMMM"),
-                cashflow: sale.good.price,
-                profit: (sale.good.price - sale.good.purchasePrice),
-                expenditures: expenditureMonths[key]
-            };
-        } else {
-            months[key].cashflow += sale.good.price;
-            months[key].profit += (sale.good.price - sale.good.purchasePrice);
-        }
-    });
-
-
+const getProps = state => {
     return {
-        sales: months
+        stat: state.stat
     }
-
 };
 
-export default connect(getProps)(Statistics)
+export default connect(getProps)(Statistics);
