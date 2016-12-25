@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {createCustomReport} from '../../actions/stat'
 import store from '../../store'
 import moment from 'moment'
+import Chart from './generateChart.jsx'
 
 class Statistics extends Component {
     constructor(props) {
@@ -86,6 +87,9 @@ class Statistics extends Component {
                     </div>
                 </div>
                 { this.props.stat.customReport ? this.getCustomReport() : "" }
+                <div className="row">
+                    <Chart />
+                </div>
             </div>
         )
     }

@@ -3,38 +3,29 @@ const axios = require('axios');
 const StatGenerator = require('./StatGenerator');
 
 exports.getAll = (req, res, next) => {
-    console.log(req.body);
+
+    if(!req.body.item) {
+        const err = new Error("Check inputted dates");
+        err.name = "WrongInputtedDate";
+        return next(err);
+    }
+
     const Selling = req.app.db.models.Selling;
-    const startDate = moment(req.body.item.startDate, "DD.MM.YYYY");
-    const endDate = moment(req.body.item.endDate, "DD.MM.YYYY");
-    const yaMetrikApi = `https://api-metrika.yandex.ru/stat/v1/data.json?id=32372795&date1=${startDate.format("YYYY-MM-DD")}&date2=${endDate.format("YYYY-MM-DD")}&metrics=ym:s:users&dimensions=ym:s:<attribution>TrafficSource&oauth_token=AQAAAAAT0xGsAAPpjNcTKg7nkUIJi7UFsCNRKcw`;
+    const dateStart = moment(req.body.item.dateStart, "DD.MM.YYYY");
+    const dateEnd = moment(req.body.item.dateEnd, "DD.MM.YYYY");
+    const yaMetrikApi = `https://api-metrika.yandex.ru/stat/v1/data.json?id=32372795&date1=${dateStart.format("YYYY-MM-DD")}&date2=${dateEnd.format("YYYY-MM-DD")}&metrics=ym:s:users&dimensions=ym:s:<attribution>TrafficSource&oauth_token=AQAAAAAT0xGsAAPpjNcTKg7nkUIJi7UFsCNRKcw`;
 
     const callback = (err, data) => {
-        if(err) next(err);
-        const Stat = new StatGenerator(data);
+        if(err) return next(err);
+
         axios.get(yaMetrikApi).then(response => {
-
-            let sumOfVisitors = null;
-
-            response.data.data.map(el => {
-                if(el.dimensions[0]["id"] == "organic" || el.dimensions[0]["id"] == "ad") {
-                    sumOfVisitors += el.metrics[0]
-                }
-            });
-
+            const Stat = new StatGenerator(data, response.data);
             let result = {
                 query: {
-                    startDate: startDate,
-                    endDate: endDate
+                    dateStart: dateStart,
+                    dateEnd: dateEnd
                 },
-                stat: {
-                    averageCheck: Stat.getAverageCheck(startDate.format(), endDate.format(), true),
-                    averageMarginPercent: Stat.getAverageMarginPercent(startDate.format(), endDate.format(), true),
-                    conversion: Stat.getConversion(startDate.format(), endDate.format(), true),
-                    profit: Stat.getProfit(startDate.format(), endDate.format(), true),
-                    cashflow: Stat.getCashFlow(startDate.format(), endDate.format(), true),
-                    sumOfSales: Stat.getSumOfSales(startDate.format(), endDate.format())
-                }
+                stat: Stat.getFullStat(dateStart.format('x'), dateEnd.format('x'))
             };
 
             res.send(result);
@@ -42,36 +33,28 @@ exports.getAll = (req, res, next) => {
 
     };
 
-    Selling.getByPeriod(startDate.format(), endDate.format(), callback);
+    Selling.getByPeriod(dateStart.format(), dateEnd.format(), callback);
 };
 
 exports.getWeekly = (req, res, next) => {
     const Selling = req.app.db.models.Selling;
-    const startDate = moment("01.09.2016", "DD.MM.YYYY");
-    const endDate = moment(req.body.item.endDate, "DD.MM.YYYY");
-    const yaMetrikApi = `https://api-metrika.yandex.ru/stat/v1/data.json?id=32372795&date1=${startDate.format("YYYY-MM-DD")}&date2=${endDate.format("YYYY-MM-DD")}&metrics=ym:s:users&dimensions=ym:s:<attribution>TrafficSource&oauth_token=AQAAAAAT0xGsAAPpjNcTKg7nkUIJi7UFsCNRKcw`;
+    const dateStart = moment("01.09.2016", "DD.MM.YYYY");
+    const dateEnd = moment();
+    const yaMetrikApi = `https://api-metrika.yandex.ru/stat/v1/data.json?id=32372795&date1=${dateStart.format("YYYY-MM-DD")}&date2=${dateEnd.format("YYYY-MM-DD")}&metrics=ym:s:users&dimensions=ym:s:<attribution>TrafficSource&oauth_token=AQAAAAAT0xGsAAPpjNcTKg7nkUIJi7UFsCNRKcw`;
 
     const callback = (err, data) => {
         if(err) next(err);
 
-
         axios.get(yaMetrikApi).then(response => {
 
-            const Stat = new StatGenerator(data, response.data.data);
+            const Stat = new StatGenerator(data, response.data);
 
             let result = {
                 query: {
-                    startDate: startDate,
-                    endDate: endDate
+                    dateStart: dateStart,
+                    dateEnd: dateEnd
                 },
-                stat: {
-                    averageCheck: Stat.getAverageCheck(startDate.format(), endDate.format(), true),
-                    averageMarginPercent: Stat.getAverageMarginPercent(startDate.format(), endDate.format(), true),
-                    conversion: Stat.getConversion(startDate.format(), endDate.format(), true),
-                    profit: Stat.getProfit(startDate.format(), endDate.format(), true),
-                    cashflow: Stat.getCashFlow(startDate.format(), endDate.format(), true),
-                    sumOfSales: Stat.getSumOfSales(startDate.format(), endDate.format())
-                }
+                weekly: Stat.getWeekly()
             };
 
             res.send(result);
@@ -79,5 +62,5 @@ exports.getWeekly = (req, res, next) => {
 
     };
 
-    Selling.getByPeriod(startDate.format(), endDate.format(), callback);
+    Selling.getByPeriod(dateStart.format(), dateEnd.format(), callback);
 };

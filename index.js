@@ -26,23 +26,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 // routes
 require('./routes')(app);
 
+// error handler
 app.use(function (err, req, res, next) {
     if(err) {
         const { name, message } = err;
         switch(name) {
             case "MissingSchemaError":
                 res.status(206).send(message);
-                console.log(err);
+                console.error(err);
                 break;
-
+            case "WrongInputtedDate":
+                res.status(500).send({ error: message });
+                console.error(err);
             default:
                 console.log(err);
-                res.status(500);
+                res.status(500).send({ error: message });
                 break;
 
         }
     }
 });
+
+
 
 // start listening
 app.listen(config.port, () => {

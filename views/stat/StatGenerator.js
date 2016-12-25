@@ -29,17 +29,41 @@ module.exports = class StatGenerator {
         this.getAverageMarginPercent = this.getAverageMarginPercent.bind(this);
         this.getProfit = this.getProfit.bind(this);
         this.getAverageCheck = this.getAverageCheck.bind(this);
+        this.getConversion= this.getConversion.bind(this);
+        this.getFullStat = this.getFullStat.bind(this);
+        this.getWeekly = this.getWeekly.bind(this);
     }
 
     getWeekly() {
         let result = [];
-        return true;
+        const dateStart = moment("01.09.2016", "DD.MM.YYYY");
+        const dateEnd = moment();
+        let cursor = dateStart.add(1, 'weeks');
+        let prevCursor = dateStart;
+        while(dateEnd.format('x') >= cursor.format('x')) {
+            console.log(this.getFullStat(dateStart.format('x'), cursor.format('x')));
+            result.push(this.getFullStat(dateStart.format('x'), cursor.format('x')));
+            prevCursor = cursor;
+            cursor.add(1, 'week');
+        }
+        return result;
+    }
+
+    getFullStat(dateStart, dateEnd) {
+        return {
+            averageCheck: this.getAverageCheck(dateStart, dateEnd, true),
+            averageMarginPercent: this.getAverageMarginPercent(dateStart, dateEnd, true),
+            conversion: this.getConversion(dateStart, dateEnd, true),
+            profit: this.getProfit(dateStart, dateEnd, true),
+            cashFlow: this.getCashFlow(dateStart, dateEnd, true),
+            sumOfSales: this.getSumOfSales(dateStart, dateEnd),
+        }
     }
 
     getSumOfSales(dateStart, dateEnd) {
         let sum = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= moment(dateStart).format('x') && moment(selling.date).format('x') <= moment(dateEnd).format('x')) {
+            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
                 sum++;
             }
         });
@@ -49,12 +73,10 @@ module.exports = class StatGenerator {
     getCashFlow(dateStart, dateEnd, formatted) {
         let cashFlow = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= moment(dateStart).format('x') && moment(selling.date).format('x') <= moment(dateEnd).format('x')) {
+            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
                 cashFlow += selling.good.price;
             }
         });
-        console.log(formatted ? cashFlow + "₽" : cashFlow);
-        console.log(this.data);
         return formatted ? cashFlow + "₽" : cashFlow;
     }
 
@@ -64,7 +86,7 @@ module.exports = class StatGenerator {
         let averageMarginPercent = 0;
 
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= moment(dateStart).format('x') && moment(selling.date).format('x') <= moment(dateEnd).format('x')) {
+            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
                 sumOfMarginPercents += 100 * (selling.good.price / selling.good.purchasePrice);
                 counter++;
             }
@@ -75,27 +97,32 @@ module.exports = class StatGenerator {
     }
 
     getConversion(dateStart, dateEnd, formatted) {
-        console.log(this.metrik);
+        let sumOfVisitors = null;
+        this.metrik.data.map(el => {
+            if(el.dimensions[0]["id"] == "organic" || el.dimensions[0]["id"] == "ad") {
+                sumOfVisitors += el.metrics[0]
+            }
+        });
+
+        return this.getSumOfSales(dateStart, dateEnd) / sumOfVisitors;
     }
 
     getGoodsExpenditures(dateStart, dateEnd, formatted) {
         let goodsExpenditures = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= moment(dateStart).format('x') && moment(selling.date).format('x') <= moment(dateEnd).format('x')) {
+            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
                 goodsExpenditures += selling.good.purchasePrice;
             }
         });
-
         return formatted ? goodsExpenditures + "₽" : goodsExpenditures;
     }
 
     getProfit(dateStart, dateEnd, formatted) {
-        let result = this.getCashFlow(dateStart, dateEnd) / this.getGoodsExpenditures(dateStart, dateEnd);
+        let result = this.getCashFlow(dateStart, dateEnd) - this.getGoodsExpenditures(dateStart, dateEnd);
         return formatted ? result + "₽" : result;
     }
 
     getAverageCheck(dateStart, dateEnd, formatted) {
-        console.log(this.getCashFlow(dateStart, dateEnd));
         let averageCheck = Math.round((this.getCashFlow(dateStart, dateEnd) / this.getSumOfSales(dateStart, dateEnd)) * 100) / 100;
         return formatted ? averageCheck + "₽" : averageCheck;
     }

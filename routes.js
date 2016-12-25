@@ -28,7 +28,9 @@ exports = module.exports = function (app) {
     app.get('/api/expenditures', require('./views/expenditures/index.js').read);
     app.delete('/api/expenditures/:id', require('./views/expenditures/index.js').delete);
 
+    app.post('/api/stat/weekly/', require('./views/stat/index.js').getWeekly);
     app.post('/api/stat/', require('./views/stat/index.js').getAll);
+
 
     app.get('/api/goods/sync/', require('./helpers/sync.js').sync);
 
