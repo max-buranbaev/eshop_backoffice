@@ -59,18 +59,17 @@ module.exports = class StatGenerator {
         const dateEnd = moment();
         let cursor = dateStart.add(1, 'weeks');
         let prevCursor = dateStart;
-        while(dateEnd.format('x') >= cursor.format('x')) {
-            let newBatch = this.getFullStat(dateStart.format('x'), cursor.format('x'));
+        while(dateEnd.format('X') >= cursor.format('X')) {
+            let newBatch = this.getFullStat(prevCursor.format('X'), cursor.format('X'));
             result[0]["data"].push(newBatch.averageCheck);
             result[1]["data"].push(newBatch.averageMarginPercent);
             result[2]["data"].push(newBatch.conversion);
             result[3]["data"].push(newBatch.profit);
             result[4]["data"].push(newBatch.cashFlow);
             result[5]["data"].push(newBatch.sumOfSales);
-            prevCursor = cursor;
+            prevCursor = moment(cursor.format());
             cursor.add(1, 'week');
         }
-        console.log(result);
         return result;
     }
 
@@ -88,40 +87,40 @@ module.exports = class StatGenerator {
     getSumOfSales(dateStart, dateEnd) {
         let sum = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
+            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 sum++;
             }
         });
         return sum;
     }
 
-    getCashFlow(dateStart, dateEnd, formatted) {
+    getCashFlow(dateStart, dateEnd) {
         let cashFlow = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
+            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 cashFlow += selling.good.price;
             }
         });
-        return formatted ? cashFlow + "₽" : cashFlow;
+        return cashFlow;
     }
 
-    getAverageMarginPercent(dateStart, dateEnd, formatted) {
+    getAverageMarginPercent(dateStart, dateEnd) {
         let sumOfMarginPercents = 0;
         let counter = 0;
         let averageMarginPercent = 0;
 
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
+            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 sumOfMarginPercents += 100 * (selling.good.price / selling.good.purchasePrice);
                 counter++;
             }
         });
 
         averageMarginPercent = Math.round((sumOfMarginPercents / this.data.length));
-        return formatted ? averageMarginPercent + "%" : averageMarginPercent;
+        return averageMarginPercent;
     }
 
-    getConversion(dateStart, dateEnd, formatted) {
+    getConversion(dateStart, dateEnd) {
         let sumOfVisitors = null;
         this.metrik.data.map(el => {
             if(el.dimensions[0]["id"] == "organic" || el.dimensions[0]["id"] == "ad") {
@@ -132,23 +131,23 @@ module.exports = class StatGenerator {
         return this.getSumOfSales(dateStart, dateEnd) / sumOfVisitors;
     }
 
-    getGoodsExpenditures(dateStart, dateEnd, formatted) {
+    getGoodsExpenditures(dateStart, dateEnd) {
         let goodsExpenditures = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('x') >= dateStart && moment(selling.date).format('x') <= dateEnd) {
+            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 goodsExpenditures += selling.good.purchasePrice;
             }
         });
-        return formatted ? goodsExpenditures + "₽" : goodsExpenditures;
+        return goodsExpenditures;
     }
 
-    getProfit(dateStart, dateEnd, formatted) {
+    getProfit(dateStart, dateEnd) {
         let result = this.getCashFlow(dateStart, dateEnd) - this.getGoodsExpenditures(dateStart, dateEnd);
-        return formatted ? result + "₽" : result;
+        return result;
     }
 
-    getAverageCheck(dateStart, dateEnd, formatted) {
+    getAverageCheck(dateStart, dateEnd) {
         let averageCheck = Math.round((this.getCashFlow(dateStart, dateEnd) / this.getSumOfSales(dateStart, dateEnd)) * 100) / 100;
-        return formatted ? averageCheck + "₽" : averageCheck;
+        return averageCheck;
     }
 };
