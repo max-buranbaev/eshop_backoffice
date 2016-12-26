@@ -35,27 +35,52 @@ module.exports = class StatGenerator {
     }
 
     getWeekly() {
-        let result = [];
+        let result = [{
+            name: "average check",
+            data: []
+        }, {
+            name: "average margin percent",
+            data: []
+        }, {
+            name: "conversion",
+            data: []
+        }, {
+            name: "profit",
+            data: []
+        }, {
+            name: "cash flow",
+            data: []
+        }, {
+            name: "sum of sales",
+            data: []
+        }];
+
         const dateStart = moment("01.09.2016", "DD.MM.YYYY");
         const dateEnd = moment();
         let cursor = dateStart.add(1, 'weeks');
         let prevCursor = dateStart;
         while(dateEnd.format('x') >= cursor.format('x')) {
-            console.log(this.getFullStat(dateStart.format('x'), cursor.format('x')));
-            result.push(this.getFullStat(dateStart.format('x'), cursor.format('x')));
+            let newBatch = this.getFullStat(dateStart.format('x'), cursor.format('x'));
+            result[0]["data"].push(newBatch.averageCheck);
+            result[1]["data"].push(newBatch.averageMarginPercent);
+            result[2]["data"].push(newBatch.conversion);
+            result[3]["data"].push(newBatch.profit);
+            result[4]["data"].push(newBatch.cashFlow);
+            result[5]["data"].push(newBatch.sumOfSales);
             prevCursor = cursor;
             cursor.add(1, 'week');
         }
+        console.log(result);
         return result;
     }
 
     getFullStat(dateStart, dateEnd) {
         return {
-            averageCheck: this.getAverageCheck(dateStart, dateEnd, true),
-            averageMarginPercent: this.getAverageMarginPercent(dateStart, dateEnd, true),
-            conversion: this.getConversion(dateStart, dateEnd, true),
-            profit: this.getProfit(dateStart, dateEnd, true),
-            cashFlow: this.getCashFlow(dateStart, dateEnd, true),
+            averageCheck: this.getAverageCheck(dateStart, dateEnd),
+            averageMarginPercent: this.getAverageMarginPercent(dateStart, dateEnd),
+            conversion: this.getConversion(dateStart, dateEnd),
+            profit: this.getProfit(dateStart, dateEnd),
+            cashFlow: this.getCashFlow(dateStart, dateEnd),
             sumOfSales: this.getSumOfSales(dateStart, dateEnd),
         }
     }

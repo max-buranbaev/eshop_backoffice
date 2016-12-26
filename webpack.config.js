@@ -1,5 +1,5 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
     devtool: 'source-map',
@@ -20,5 +20,13 @@ module.exports = {
                 plugins: ['transform-decorators-legacy']
             }
         }]
+    },
+    devServer: {
+        host: 'localhost',
+        port: '8080',
+        proxy: {
+            '/api/': 'http://s.dokis.ru',
+            '/': 'http://localhost:5000'
+        }
     }
 }
