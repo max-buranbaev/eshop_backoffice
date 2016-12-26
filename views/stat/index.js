@@ -20,6 +20,8 @@ exports.getAll = (req, res, next) => {
 
         axios.get(yaMetrikApi).then(response => {
             const Stat = new StatGenerator(data, response.data);
+            console.log(data);
+            console.log(response.data);
             let result = {
                 query: {
                     dateStart: dateStart,
@@ -48,16 +50,7 @@ exports.getWeekly = (req, res, next) => {
         axios.get(yaMetrikApi).then(response => {
 
             const Stat = new StatGenerator(data, response.data);
-
-            let result = {
-                query: {
-                    dateStart: dateStart,
-                    dateEnd: dateEnd
-                },
-                weekly: Stat.getWeekly()
-            };
-
-            res.send(result);
+            res.send(Stat.getWeekly());
         });
 
     };
