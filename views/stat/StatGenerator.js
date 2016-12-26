@@ -102,7 +102,6 @@ module.exports = class StatGenerator {
     getAverageMarginPercent(dateStart, dateEnd) {
         let sumOfMarginPercents = 0;
         let counter = 0;
-        let averageMarginPercent = 0;
 
         this.data.map(selling => {
             if (moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
@@ -111,7 +110,7 @@ module.exports = class StatGenerator {
             }
         });
 
-        averageMarginPercent = Math.round((sumOfMarginPercents / this.data.length));
+        let averageMarginPercent = Math.round((sumOfMarginPercents / this.data.length));
         return {
             name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
             y: averageMarginPercent
@@ -128,7 +127,7 @@ module.exports = class StatGenerator {
 
         return {
             name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
-            y: this.getSumOfSales(dateStart, dateEnd) / sumOfVisitors
+            y: this.getSumOfSales(dateStart, dateEnd).y / sumOfVisitors
         };
     }
 
@@ -139,6 +138,7 @@ module.exports = class StatGenerator {
                 goodsExpenditures += selling.good.purchasePrice;
             }
         });
+
         return {
             name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
             y: goodsExpenditures
@@ -146,7 +146,7 @@ module.exports = class StatGenerator {
     }
 
     getProfit(dateStart, dateEnd) {
-        let result = this.getCashFlow(dateStart, dateEnd) - this.getGoodsExpenditures(dateStart, dateEnd);
+        let result = this.getCashFlow(dateStart, dateEnd).y - this.getGoodsExpenditures(dateStart, dateEnd).y;
         return {
             name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
             y: result
@@ -154,7 +154,7 @@ module.exports = class StatGenerator {
     }
 
     getAverageCheck(dateStart, dateEnd) {
-        let averageCheck = Math.round((this.getCashFlow(dateStart, dateEnd) / this.getSumOfSales(dateStart, dateEnd)) * 100) / 100;
+        let averageCheck = Math.round((this.getCashFlow(dateStart, dateEnd).y / this.getSumOfSales(dateStart, dateEnd).y) * 100) / 100;
         return {
             name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
             y: averageCheck
