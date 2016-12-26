@@ -31,13 +31,17 @@ app.use(function (err, req, res, next) {
     if(err) {
         const { name, message } = err;
         switch(name) {
+
             case "MissingSchemaError":
                 res.status(206).send(message);
                 console.error(err);
                 break;
+
             case "WrongInputtedDate":
                 res.status(500).send({ error: message });
                 console.error(err);
+                break;
+
             default:
                 console.log(err);
                 res.status(500).send({ error: message });

@@ -3,7 +3,7 @@ const axios = require('axios');
 const StatGenerator = require('./StatGenerator');
 
 exports.getAll = (req, res, next) => {
-
+    console.log(req.body);
     if(!req.body.item) {
         const err = new Error("Check inputted dates");
         err.name = "WrongInputtedDate";

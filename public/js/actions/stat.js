@@ -4,9 +4,18 @@ export function createCustomReport(startDate, endDate) {
         createItem: {
             url: `/api/stat/`,
             data: {
-                startDate: startDate,
-                endDate: endDate
+                dateStart: startDate,
+                dateEnd: endDate
             }
+        }
+    }
+}
+
+export function createWeeklyReport() {
+    return {
+        type: "CREATE_WEEKLY_REPORT",
+        createItem: {
+            url: `/api/stat/weekly`
         }
     }
 }

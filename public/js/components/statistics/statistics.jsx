@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {createCustomReport} from '../../actions/stat'
 import store from '../../store'
 import moment from 'moment'
-import Chart from './generateChart.jsx'
+import Chart from './chart.jsx'
 
 class Statistics extends Component {
     constructor(props) {

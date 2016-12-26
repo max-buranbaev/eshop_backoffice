@@ -9,6 +9,12 @@ const Reducer = function(state = [], action) {
             });
             break;
 
+        case "CREATE_WEEKLY_REPORT":
+            return Object.assign({}, state, {
+                weeklyReport: action.payload
+            });
+            break;
+
         default:
             return state;
     }

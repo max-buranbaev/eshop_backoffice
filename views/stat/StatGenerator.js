@@ -1,4 +1,4 @@
-const moment =require('moment');
+const moment = require('moment');
 
 module.exports = class StatGenerator {
 
@@ -29,44 +29,33 @@ module.exports = class StatGenerator {
         this.getAverageMarginPercent = this.getAverageMarginPercent.bind(this);
         this.getProfit = this.getProfit.bind(this);
         this.getAverageCheck = this.getAverageCheck.bind(this);
-        this.getConversion= this.getConversion.bind(this);
+        this.getConversion = this.getConversion.bind(this);
         this.getFullStat = this.getFullStat.bind(this);
         this.getWeekly = this.getWeekly.bind(this);
     }
 
     getWeekly() {
-        let result = [{
-            name: "average check",
-            data: []
-        }, {
-            name: "average margin percent",
-            data: []
-        }, {
-            name: "conversion",
-            data: []
-        }, {
-            name: "profit",
-            data: []
-        }, {
-            name: "cash flow",
-            data: []
-        }, {
-            name: "sum of sales",
-            data: []
-        }];
+        let result = {
+            averageCheck: [],
+            averageMarginPercent: [],
+            conversion: [],
+            profit: [],
+            cashFlow: [],
+            sumOfSales: []
+        };
 
         const dateStart = moment("01.09.2016", "DD.MM.YYYY");
         const dateEnd = moment();
         let cursor = dateStart.add(1, 'weeks');
         let prevCursor = dateStart;
-        while(dateEnd.format('X') >= cursor.format('X')) {
+        while (dateEnd.format('X') >= cursor.format('X')) {
             let newBatch = this.getFullStat(prevCursor.format('X'), cursor.format('X'));
-            result[0]["data"].push(newBatch.averageCheck);
-            result[1]["data"].push(newBatch.averageMarginPercent);
-            result[2]["data"].push(newBatch.conversion);
-            result[3]["data"].push(newBatch.profit);
-            result[4]["data"].push(newBatch.cashFlow);
-            result[5]["data"].push(newBatch.sumOfSales);
+            result.averageCheck.push(newBatch.averageCheck);
+            result.averageMarginPercent.push(newBatch.averageMarginPercent);
+            result.conversion.push(newBatch.conversion);
+            result.profit.push(newBatch.profit);
+            result.cashFlow.push(newBatch.cashFlow);
+            result.sumOfSales.push(newBatch.sumOfSales);
             prevCursor = moment(cursor.format());
             cursor.add(1, 'week');
         }
@@ -87,21 +76,27 @@ module.exports = class StatGenerator {
     getSumOfSales(dateStart, dateEnd) {
         let sum = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
+            if (moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 sum++;
             }
         });
-        return sum;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: sum
+        };
     }
 
     getCashFlow(dateStart, dateEnd) {
         let cashFlow = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
+            if (moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 cashFlow += selling.good.price;
             }
         });
-        return cashFlow;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: cashFlow
+        };
     }
 
     getAverageMarginPercent(dateStart, dateEnd) {
@@ -110,44 +105,59 @@ module.exports = class StatGenerator {
         let averageMarginPercent = 0;
 
         this.data.map(selling => {
-            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
+            if (moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 sumOfMarginPercents += 100 * (selling.good.price / selling.good.purchasePrice);
                 counter++;
             }
         });
 
         averageMarginPercent = Math.round((sumOfMarginPercents / this.data.length));
-        return averageMarginPercent;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: averageMarginPercent
+        };
     }
 
     getConversion(dateStart, dateEnd) {
         let sumOfVisitors = null;
         this.metrik.data.map(el => {
-            if(el.dimensions[0]["id"] == "organic" || el.dimensions[0]["id"] == "ad") {
+            if (el.dimensions[0]["id"] == "organic" || el.dimensions[0]["id"] == "ad") {
                 sumOfVisitors += el.metrics[0]
             }
         });
 
-        return this.getSumOfSales(dateStart, dateEnd) / sumOfVisitors;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: this.getSumOfSales(dateStart, dateEnd) / sumOfVisitors
+        };
     }
 
     getGoodsExpenditures(dateStart, dateEnd) {
         let goodsExpenditures = 0;
         this.data.map(selling => {
-            if(moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
+            if (moment(selling.date).format('X') >= dateStart && moment(selling.date).format('X') <= dateEnd) {
                 goodsExpenditures += selling.good.purchasePrice;
             }
         });
-        return goodsExpenditures;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: goodsExpenditures
+        };
     }
 
     getProfit(dateStart, dateEnd) {
         let result = this.getCashFlow(dateStart, dateEnd) - this.getGoodsExpenditures(dateStart, dateEnd);
-        return result;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: result
+        };
     }
 
     getAverageCheck(dateStart, dateEnd) {
         let averageCheck = Math.round((this.getCashFlow(dateStart, dateEnd) / this.getSumOfSales(dateStart, dateEnd)) * 100) / 100;
-        return averageCheck;
+        return {
+            name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
+            y: averageCheck
+        };
     }
 };
