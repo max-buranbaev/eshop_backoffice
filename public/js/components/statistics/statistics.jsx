@@ -44,12 +44,12 @@ class Statistics extends Component {
                             <th>Конверсия</th>
                         </tr>
                         <tr>
-                            <td>{stat.cashflow} ₽</td>
-                            <td>{stat.profit} ₽</td>
-                            <td>{stat.averageCheck} ₽</td>
-                            <td>{stat.averageMarginPercent} %</td>
-                            <td>{stat.sumOfSales} </td>
-                            <td>{stat.conversion} %</td>
+                            <td>{stat.cashFlow.y} ₽</td>
+                            <td>{stat.profit.y} ₽</td>
+                            <td>{stat.averageCheck.y} ₽</td>
+                            <td>{stat.averageMarginPercent.y} %</td>
+                            <td>{stat.sumOfSales.y} </td>
+                            <td>{stat.conversion.y} %</td>
                         </tr>
                         </tbody>
                     </table>

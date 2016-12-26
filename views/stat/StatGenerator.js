@@ -127,7 +127,7 @@ module.exports = class StatGenerator {
 
         return {
             name: `${moment(dateStart, 'X').format("DD.MM")}-${moment(dateEnd, 'X').format("DD.MM")}`,
-            y: this.getSumOfSales(dateStart, dateEnd).y / sumOfVisitors
+            y: (this.getSumOfSales(dateStart, dateEnd).y / sumOfVisitors) * 100
         };
     }
 

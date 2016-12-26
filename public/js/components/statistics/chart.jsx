@@ -8,8 +8,11 @@ class Chart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            config: null
-        }
+            configFinance: null,
+            configConversion: null
+        };
+
+        this.getCharts = this.getCharts.bind(this);
     }
 
     componentWillMount() {
@@ -17,12 +20,11 @@ class Chart extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.weeklyReport[4]);
         if (nextProps.weeklyReport) {
             this.setState({
-                config: {
+                configFinance: {
                     title: {
-                        text: 'Fruit Consumption'
+                        text: 'Финансы'
                     },
                     xAxis: {
                         tickInterval: 7 * 24 * 3600 * 1000, // one week
@@ -36,15 +38,54 @@ class Chart extends React.Component {
                     },
                     series: [{
                         name: "Оборот",
-                        data: nextProps.weeklyReport[4]["data"]
+                        data: nextProps.weeklyReport.cashFlow
+                    },
+                    {
+                        name: "Прибыль",
+                        data: nextProps.weeklyReport.profit
+                    }]
+                },
+                configConversion: {
+                    title: {
+                        text: 'Конверсия'
+                    },
+                    xAxis: {
+                        tickInterval: 7 * 24 * 3600 * 1000, // one week
+                        tickWidth: 0,
+                        gridLineWidth: 1,
+                        labels: {
+                            align: 'left',
+                            x: 3,
+                            y: -3
+                        }
+                    },
+                    series: [{
+                        name: "Конверсия",
+                        data: nextProps.weeklyReport.conversion
                     }]
                 }
             });
         }
     }
 
+    getCharts() {
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <ReactHighcharts config={this.state.configFinance}/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <ReactHighcharts config={this.state.configConversion}/>
+                    </div>
+                </div>
+            </div>
+        )
+    }
     render() {
-        return this.state.config ? <ReactHighcharts config={this.state.config}/> : <p>Loading</p>;
+        return this.state.configFinance ? this.getCharts() : <p>Loading</p>;
     }
 
 }
