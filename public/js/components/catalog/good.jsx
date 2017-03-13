@@ -9,12 +9,14 @@ class Good extends React.Component {
     }
 
     render() {
+      const { name, purchasePrice, price, siteId } = this.props.good;
       return (
         <tr>
-          <td className="hidden-xs">{ this.props.good.siteId }</td>
-          <td>{ this.props.good.name }</td>
-          <td>{ this.props.good.purchasePrice }</td>
-          <td>{ this.props.good.price }</td>
+          <td className="hidden-xs">{ siteId }</td>
+          <td>{ name }</td>
+          <td>{ purchasePrice }</td>
+          <td>{ price }</td>
+          <td>{ price - purchasePrice }</td>
           <td>
             <button onClick={ this.showSelling.bind(this) } className="btn btn-xs btn-success">продажа</button>
           </td>

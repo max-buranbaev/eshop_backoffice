@@ -23,6 +23,10 @@ var Catalog = React.createClass({
                             <span className="hidden-xs hidden-sm">Продажа</span>
                             <span className="hidden-md hidden-lg">Про</span>
                           </th>
+                          <th>
+                            <span className="hidden-xs hidden-sm">Маржа</span>
+                            <span className="hidden-md hidden-lg">Мар</span>
+                          </th>
                           <th></th>
                         </tr>
                       </thead>
