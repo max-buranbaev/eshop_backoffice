@@ -28,6 +28,9 @@ class TopPanel extends React.Component {
                             <Link to="/sales">Продажи</Link>
                         </li>
                         <li>
+                            <Link to="/categories">Категории</Link>
+                        </li>
+                        <li>
                             <Link to="/statistics">Статистика</Link>
                         </li>
                         <li>

@@ -4,7 +4,7 @@ exports.add = function(req, res) {
     var db = req.app.db;
     var Category = db.model('Category');
 
-    Category.statics.add(req.body.name, req.body.siteId, (category) => res.send(200, category)); 
+    Category.statics.add(req.body.name, req.body.siteId, (category) => res.send(200, category));
 }
 
 exports.getAll = function(req, res, next) {

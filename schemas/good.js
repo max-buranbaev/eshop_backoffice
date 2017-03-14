@@ -22,14 +22,16 @@ exports = module.exports = function(app, mongoose) {
       unique: true
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category'
+      type: Number
+    },
+    active: {
+      type: Boolean
     }
   });
 
   schema.statics.getAll = function(callback) {
     var Good = this;
-    Good.find({}, 'name purchasePrice price siteId').populate('category._id').exec(function(err, goods) {
+    Good.find({'active': true}, 'name purchasePrice price siteId category').exec(function(err, goods) {
       if (err) return callback(err);
       return callback(null, goods);
     });
@@ -43,7 +45,7 @@ exports = module.exports = function(app, mongoose) {
     promise.addBack( (err, goods) => {
       if(err) next(err);
 
-      return goods; 
+      return goods;
     });
   }
 
@@ -65,6 +67,7 @@ exports = module.exports = function(app, mongoose) {
     newGood.purchasePrice = parseInt(good.purchasePrice);
     newGood.price = parseInt(good.price);
     newGood.category = good.category;
+    newGood.active = !!good.active;
     newGood.save( (err, good) => {
         callback();
     });
@@ -101,7 +104,7 @@ exports = module.exports = function(app, mongoose) {
       if(_.isEmpty(findedOffer)) {
         Good.add(offer, callback);
       } else {
-        Good.update({ siteId: offer.id }, { name: offer.name, purchasePrice: offer.purchasePrice, price: offer.price }, "", callback)
+        Good.update({ siteId: offer.id }, offer, "", callback);
       }
     });
 

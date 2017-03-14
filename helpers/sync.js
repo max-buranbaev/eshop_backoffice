@@ -44,7 +44,8 @@ exports.sync = function(req, res, next) {
                         name: offer.name,
                         purchasePrice: offer.purchase_price[0],
                         price: offer.price[0],
-                        categorySite: Category.getIdbySiteId(offer.id)
+                        category: offer.categoryId[0],
+                        active: offer.active[0]
                     },
                     (err) => {
                         if(err) callback(err);

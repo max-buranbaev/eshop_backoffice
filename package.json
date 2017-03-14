@@ -7,6 +7,7 @@
     "start": "webpack & node index.js",
     "dev-front": "webpack-dev-server --hot --inline --watch",
     "dev-back": "webpack & forever -w index.js",
+    "dev": "webpack --watch & forever -w index.js",
     "debug": "node debug index.js"
   },
   "repository": {

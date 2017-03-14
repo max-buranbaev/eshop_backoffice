@@ -25,7 +25,6 @@ module.exports = {
         host: 'localhost',
         port: '8080',
         proxy: {
-            '/api/': 'http://s.dokis.ru',
             '/': 'http://localhost:5000'
         }
     }

@@ -19,7 +19,7 @@ exports = module.exports = function(app, mongoose) {
   schema.statics.getAll = function(callback) {
     var Category = this;
 
-    Category.find({}, 'name', function(err, categories) {
+    Category.find({}, 'name siteId', function(err, categories) {
       if (err) return callback(err);
       return callback(null, categories);
     });
@@ -40,8 +40,8 @@ exports = module.exports = function(app, mongoose) {
 
   schema.statics.getIdbySiteId = function(siteId) {
     var Category = this;
-    Category.find({ siteId: siteId }, '_id', function(err, findedCategory) {
-        return findedCategory;
+    Category.findOne({ siteId: siteId }, '_id', function(err, findedCategory) {
+      return findedCategory.id;
     });
   }
 

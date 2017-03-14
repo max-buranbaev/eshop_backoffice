@@ -6,6 +6,7 @@ export const ADD_SELLING_URI = "/api/sales/";
 export const DELETE_SELLING_URI = "/api/sales/";
 
 export const EXPENDITURE_URI = "/api/expenditures/";
+export const FETCH_CATEGORIES_URI = "/api/categories/";
 
 export function getSource(source) {
     switch (parseInt(source)) {

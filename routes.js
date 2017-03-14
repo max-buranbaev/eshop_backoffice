@@ -31,6 +31,7 @@ exports = module.exports = function (app) {
     app.post('/api/stat/weekly/', require('./views/stat/index.js').getWeekly);
     app.post('/api/stat/', require('./views/stat/index.js').getAll);
 
+    app.get('/api/categories/', require('./views/categories/index.js').getAll);
 
     app.get('/api/goods/sync/', require('./helpers/sync.js').sync);
 
