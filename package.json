@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack & node index.js",
-    "dev-front": "webpack-dev-server --hot --inline --watch",
+    "dev-front": "webpack-dev-server --hot --inline --watch & forever -w index.js",
     "dev-back": "webpack & forever -w index.js",
     "dev": "webpack --watch & forever -w index.js",
     "debug": "node debug index.js"

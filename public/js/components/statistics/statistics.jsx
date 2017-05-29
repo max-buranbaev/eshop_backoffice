@@ -37,6 +37,7 @@ class Statistics extends Component {
                         <tbody>
                         <tr>
                             <th>Оборот</th>
+                            <th>Закупка Товара</th>
                             <th>Прибыль</th>
                             <th>Средний чек</th>
                             <th>Средняя наценка</th>
@@ -45,6 +46,7 @@ class Statistics extends Component {
                         </tr>
                         <tr>
                             <td>{stat.cashFlow.y} ₽</td>
+                            <td>{stat.goodsExpenditures.y} ₽</td>
                             <td>{stat.profit.y} ₽</td>
                             <td>{stat.averageCheck.y} ₽</td>
                             <td>{stat.averageMarginPercent.y} %</td>
