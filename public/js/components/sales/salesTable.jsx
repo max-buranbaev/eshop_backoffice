@@ -20,6 +20,9 @@ var SalesTable = React.createClass({
                             <thead>
                                 <tr>
                                     <th>Товар</th>
+                                    <th>Стоимость Продажи</th>
+                                    <th>Закупочная цена</th>
+                                    <th>Маржа</th>
                                     <th>Дата</th>
                                     <th>Источник</th>
                                     <th>Телефон</th>

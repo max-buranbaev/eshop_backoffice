@@ -10,9 +10,13 @@ var Selling = React.createClass({
     },
 
     render: function() {
+        const { name, price, purchasePrice } = this.props.selling.good
         return (
             <tr>
-                <td>{ this.props.selling.good.name }</td>
+                <td>{ name }</td>
+                <td>{ price }</td>
+                <td>{ purchasePrice }</td>
+                <td>{ price - purchasePrice }</td>
                 <td>{ moment(this.props.selling.date).format("DD.MM.YYYY") }</td>
                 <td>{ getSource(this.props.selling.source) }</td>
                 <td>{ this.props.selling.phone }</td>

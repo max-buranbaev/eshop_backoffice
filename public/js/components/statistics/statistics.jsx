@@ -45,8 +45,8 @@ class Statistics extends Component {
                             <th>Конверсия</th>
                         </tr>
                         <tr>
-                            <td>{stat.cashFlow.y} ₽</td>
-                            <td>{stat.goodsExpenditures.y} ₽</td>
+                            <td>{Math.round(stat.cashFlow.y)} ₽</td>
+                            <td>{Math.round(stat.goodsExpenditures.y)} ₽</td>
                             <td>{stat.profit.y} ₽</td>
                             <td>{stat.averageCheck.y} ₽</td>
                             <td>{stat.averageMarginPercent.y} %</td>
