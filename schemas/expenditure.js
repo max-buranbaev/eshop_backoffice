@@ -1,25 +1,31 @@
-'use strict';
+'use strict'
 
-exports = module.exports = function(app, mongoose) {
+const moment = require('moment')
 
-    var schema = new mongoose.Schema({
-        description: {
-            type: String,
-            required: true
-        },
-        type: String,
-        date: {
-            type: Date,
-            default: new Date()
-        },
-        amount: Number
-    });
+exports = module.exports = function (app, mongoose) {
+  const schema = new mongoose.Schema({
+    description: {
+      type: String,
+      required: true
+    },
+    type: String,
+    date: {
+      type: Date,
+      default: new Date()
+    },
+    amount: Number
+  })
 
-    schema.static.getAll = function(callback) {
-        var Expenditure = this;
-        Expenditure.find().exec( (err, expenditures) => callback(err, expenditures) );
-    };
+  schema.statics.getAll = function (callback) {
+    const Expenditure = this
+    Expenditure.find().exec((err, expenditures) => callback(err, expenditures))
+  }
 
-    app.db.model('Expenditure', schema);
-};
+  schema.statics.getByPeriod = async function (startDate, endDate, cb) {
+    const Expenditure = this
+    const result = await Expenditure.find({ date: {$gt: startDate, $lt: endDate} })
+    return cb(null, result)
+  }
 
+  app.db.model('Expenditure', schema)
+}

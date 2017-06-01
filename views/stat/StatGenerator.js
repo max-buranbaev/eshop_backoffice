@@ -1,7 +1,9 @@
+'use strict'
+
 const moment = require('moment')
 
 module.exports = class StatGenerator {
-  constructor (data, metrik) {
+  constructor (data, metrik, app) {
     this.data = data
     this.metrik = metrik
     let cashFlow = null
@@ -14,13 +16,14 @@ module.exports = class StatGenerator {
       goodsCost += selling.good.purchasePrice
     })
 
+    this.app = app
     this.sumOfSales = this.data.length
     this.averageCheck = Math.round((cashFlow / this.data.length) * 100) / 100
     this.averageMarginPercent = Math.round((sumOfMarginPercents / this.data.length) * 100) / 100
     this.profit = cashFlow - goodsCost
     this.cashFlow = cashFlow
 
-        // binders
+    // binders
     this.getProfit = this.getProfit.bind(this)
     this.getGoodsExpenditures = this.getGoodsExpenditures.bind(this)
     this.getSumOfSales = this.getSumOfSales.bind(this)
@@ -31,6 +34,7 @@ module.exports = class StatGenerator {
     this.getConversion = this.getConversion.bind(this)
     this.getFullStat = this.getFullStat.bind(this)
     this.getWeekly = this.getWeekly.bind(this)
+    this.getNonGoodExpenditures = this.getNonGoodExpenditures.bind(this)
   }
 
   getWeekly () {
@@ -61,7 +65,7 @@ module.exports = class StatGenerator {
     return result
   }
 
-  getFullStat (dateStart, dateEnd) {
+  async getFullStat (dateStart, dateEnd) {
     return {
       averageCheck: this.getAverageCheck(dateStart, dateEnd),
       averageMarginPercent: this.getAverageMarginPercent(dateStart, dateEnd),
@@ -69,7 +73,8 @@ module.exports = class StatGenerator {
       profit: this.getProfit(dateStart, dateEnd),
       cashFlow: this.getCashFlow(dateStart, dateEnd),
       sumOfSales: this.getSumOfSales(dateStart, dateEnd),
-      goodsExpenditures: this.getGoodsExpenditures(dateStart, dateEnd)
+      goodsExpenditures: this.getGoodsExpenditures(dateStart, dateEnd),
+      otherExpenditures: await this.getNonGoodExpenditures(dateStart, dateEnd)
     }
   }
 
@@ -117,10 +122,16 @@ module.exports = class StatGenerator {
     }
   }
 
+  async getNonGoodExpenditures (dateStart, dateEnd) {
+    const expendituresModel = this.app.db.models.Expenditure
+    const result = await expendituresModel.find({ date: {$gt: moment(dateStart, 'X').format(), $lt: moment(dateEnd, 'X').format()} })
+    return result.reduce((acc, el) => acc + el.amount, 0)
+  }
+
   getConversion (dateStart, dateEnd) {
     let sumOfVisitors = null
     this.metrik.data.map(el => {
-      if (el.dimensions[0]['id'] === 'organic' || el.dimensions[0]['id'] == 'ad') {
+      if (el.dimensions[0]['id'] === 'organic' || el.dimensions[0]['id'] === 'ad') {
         sumOfVisitors += el.metrics[0]
       }
     })

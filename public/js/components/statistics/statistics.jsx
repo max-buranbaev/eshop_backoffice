@@ -47,7 +47,7 @@ class Statistics extends Component {
                         <tr>
                             <td>{Math.round(stat.cashFlow.y)} ₽</td>
                             <td>{Math.round(stat.goodsExpenditures.y)} ₽</td>
-                            <td>{stat.profit.y} ₽</td>
+                            <td>{stat.profit.y - stat.otherExpenditures} ₽</td>
                             <td>{stat.averageCheck.y} ₽</td>
                             <td>{stat.averageMarginPercent.y} %</td>
                             <td>{stat.sumOfSales.y} </td>
